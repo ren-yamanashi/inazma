@@ -1,0 +1,7 @@
+/dist
+node_modules
+package.json
+yarn.lock
+tsconfig.json
+tsconfig.eslint.json
+vitest.config.js
