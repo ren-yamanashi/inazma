@@ -23,6 +23,7 @@ module.exports = {
     '@typescript-eslint/no-unsafe-member-access': 'error',
     '@typescript-eslint/require-await': 'error',
     '@typescript-eslint/no-unused-vars': ['error'],
+    "@typescript-eslint/no-explicit-any": "error",
     'prefer-const': 'off',
   },
 };
