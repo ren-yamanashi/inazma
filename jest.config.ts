@@ -1,6 +1,6 @@
 export default {
   moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],
-  testMatch: ['<rootDir>/src/**/*.test.ts', '<rootDir>/src/__test__/**/*.spec.ts'],
+  testMatch: ['<rootDir>/src/__tests__/**/*.spec.ts'],
   testPathIgnorePatterns: [],
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
