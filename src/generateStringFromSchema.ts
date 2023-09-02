@@ -1,5 +1,4 @@
-import fs from 'fs';
-import { TableSchema } from './createTable';
+import { TableSchema } from './index';
 import { ColumnSchema } from './parseColumn';
 
 type ParseOptions = {
@@ -12,19 +11,6 @@ type GenerateStringEnumAndColumnsFromSchema = {
     enums: string[];
     columns: string[];
   };
-};
-
-/**
- * 文字列形式のschemaをfileに書き込む
- * @param {string} stringSchema - 文字列形式のschema
- * @param {string} fileName - file名
- */
-export const writeSchemaFile = (stringSchema: string, fileName: string): void => {
-  try {
-    fs.writeFileSync(fileName, stringSchema);
-  } catch (err: unknown) {
-    console.error(`Error writing to file: ${err}`);
-  }
 };
 
 /**
@@ -41,7 +27,7 @@ export const generateStringFromSchema = (tables: TableSchema[], options: ParseOp
     });
 
     const tableName = options.toUpperCamelCase(table.name);
-    const text = `${enums.join('\n')}\ntype ${tableName} = {\n${columns.join('\n')}\n};\n`;
+    const text = `${enums.join('\n')}\n\ntype ${tableName} = {\n${columns.join('\n')}\n};\n`;
     schemaStringList.push(text);
   }
   return schemaStringList.join('\n');
@@ -69,7 +55,7 @@ export const generateStringEnumAndColumnsFromSchema = (
     if (ENUM_REGEXP.test(columnType)) {
       const enumName = options.toUpperCamelCase(columnField);
       const enumFiled = String(columnType.match(PAREN_REGEXP)).replace(/'/g, '').split(',');
-      enums.push(`enum ${enumName} {\n${enumFiled.join(',\n')}\n};\n`);
+      enums.push(`enum ${enumName} {\n${enumFiled.join(',\n')}\n};`);
       columns.push(`${columnField}: ${enumName};`);
       continue;
     }
