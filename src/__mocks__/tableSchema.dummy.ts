@@ -1,4 +1,4 @@
-import { TableSchema } from '../index';
+import { TableSchema } from '../types/schema.type';
 import { columnIncludeEnumSchemasDummy } from './columnSchema.dummy';
 import { indexSchemasDummy } from './indexSchema.dummy';
 

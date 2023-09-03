@@ -1,4 +1,4 @@
-import { IndexSchema } from '../parseIndex';
+import { IndexSchema } from '../types/schema.type';
 
 export const indexSchemasDummy: IndexSchema[] = [
   { keyName: 'PRIMARY', unique: true, columnNames: ['id'] },

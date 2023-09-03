@@ -1,5 +1,96 @@
 {
-    "cSpell.words": [
-        "inazma"
-    ]
+  // formatter
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "editor.codeActionsOnSave": ["source.organizeImports", "source.fixAll.eslint"],
+  "eslint.options": {
+    "ignorePath": "./.eslintignore"
+  },
+  "cSpell.words": ["inazma", "datetime"],
+  "prettier.configPath": ".prettierrc",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  // icons-theme
+  "workbench.iconTheme": "vscode-icons",
+  "vsicons.associations.files": [
+    {
+      "icon": "modernizr",
+      "extensions": ["error.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "bazel",
+      "extensions": ["stub.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "typescriptdef",
+      "extensions": ["type.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "typescriptdef",
+      "extensions": ["type.ts", "interface.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "razor",
+      "extensions": ["decorator.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "bazel",
+      "extensions": ["dummy.ts", "mock.ts", "stub.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "rust_toolchain",
+      "extensions": ["infrastructure.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "source",
+      "extensions": ["index.ts"],
+      "format": "svg",
+      "filename": true
+    },
+    {
+      "icon": "formkit",
+      "extensions": ["command.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "dependencies",
+      "extensions": ["di.ts"],
+      "format": "svg",
+      "filename": true
+    }
+  ],
+  "vsicons.associations.folders": [
+    {
+      "icon": "chef",
+      "extensions": ["decorator"],
+      "format": "svg"
+    },
+    {
+      "icon": "devcontainer",
+      "extensions": ["sample"],
+      "format": "svg"
+    },
+    {
+      "icon": "tools",
+      "extensions": ["infrastructures"],
+      "format": "svg"
+    }
+  ]
 }

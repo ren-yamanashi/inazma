@@ -8,7 +8,7 @@
     "yarn": "1.22.11"
   },
   "scripts": {
-    "dev": "npm run build && node dist/index.js",
+    "dev": "export APP_ENV='local' npm run build && node dist/index.js",
     "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js",
     "build:watch": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js --watch=forever & nodemon dist/index.js",
     "test": "jest",
