@@ -59,7 +59,7 @@ export const columnIncludeEnumSchemasDummy: ColumnSchema[] = [
     nullable: false,
     key: '',
     unsigned: false,
-    defaultValue: 'CURRENT_TIMESTAMP',
+    defaultValue: 'NOW()',
     extra: 'DEFAULT_GENERATED',
   },
 ];
@@ -102,7 +102,7 @@ export const columnNotIncludeEnumSchemasDummy: ColumnSchema[] = [
     nullable: false,
     key: '',
     unsigned: false,
-    defaultValue: 'CURRENT_TIMESTAMP',
+    defaultValue: 'NOW()',
     extra: 'DEFAULT_GENERATED',
   },
 ];

@@ -130,7 +130,7 @@ describe('generateStringEnumAndColumnsFromSchema', () => {
       `@Column({\ntype: \"varchar(255)\",\ndefault: null,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncontent: string | null;\n`,
       `@Column({\ntype: \"int\",\ndefault: 0,\nunsigned: true,\nunique: false,\nprimary: false\n})\norder: number;\n`,
       `@Column({\ntype: \"enum('active','inactive','deleted')\",\ndefault: Status.active,\nunsigned: false,\nunique: false,\nprimary: false\n})\nstatus: Status;\n`,
-      `@DefaultGeneratedColumn({\ntype: \"datatime\",\ndefault: CURRENT_TIMESTAMP,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
+      `@DefaultGeneratedColumn({\ntype: \"datatime\",\ndefault: NOW(),\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
     ];
     // GIVEN: output(enums)
     const enums = [
