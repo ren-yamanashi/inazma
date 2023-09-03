@@ -161,7 +161,7 @@ deleted
       `@AutoIncrementColumn({\ntype: \"bigint\",\ndefault: null,\nunsigned: true,\nunique: true,\nprimary: true\n})\nid: number;\n`,
       `@Column({\ntype: \"varchar(255)\",\ndefault: null,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncontent: string | null;\n`,
       `@Column({\ntype: \"int\",\ndefault: 0,\nunsigned: true,\nunique: false,\nprimary: false\n})\norder: number;\n`,
-      `@DefaultGeneratedColumn({\ntype: \"datatime\",\ndefault: CURRENT_TIMESTAMP,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
+      `@DefaultGeneratedColumn({\ntype: \"datatime\",\ndefault: NOW(),\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
     ];
 
     // WHEN
@@ -227,7 +227,7 @@ status: Status;
 
 @DefaultGeneratedColumn({
 type: "datatime",
-default: CURRENT_TIMESTAMP,
+default: NOW(),
 unsigned: false,
 unique: false,
 primary: false
