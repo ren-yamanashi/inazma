@@ -30,7 +30,7 @@ export function Column(options: ColumnOptions) {
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return function (target: object, propertyKey: string | symbol): void {
+  return function (target: unknown, propertyKey: unknown, descriptor?: PropertyDescriptor): void {
     // TODO: デコレーターの処理の実装
   };
 }
@@ -45,7 +45,7 @@ export function AutoIncrementColumn(options: ColumnOptions) {
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return function (target: object, propertyKey: string | symbol): void {
+  return function (target: unknown, propertyKey: unknown, descriptor?: PropertyDescriptor): void {
     // TODO: デコレーターの処理の実装
   };
 }
@@ -60,7 +60,7 @@ export function VirtualGeneratedColumn(options: ColumnOptions) {
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return function (target: object, propertyKey: string | symbol): void {
+  return function (target: unknown, propertyKey: unknown, descriptor?: PropertyDescriptor): void {
     // TODO: デコレーターの処理の実装
   };
 }
@@ -75,7 +75,7 @@ export function StoredGeneratedColumn(options: ColumnOptions) {
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return function (target: object, propertyKey: string | symbol): void {
+  return function (target: unknown, propertyKey: unknown, descriptor?: PropertyDescriptor): void {
     // TODO: デコレーターの処理の実装
   };
 }
@@ -90,7 +90,7 @@ export function DefaultGeneratedColumn(options: ColumnOptions) {
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return function (target: object, propertyKey: string | symbol): void {
+  return function (target: unknown, propertyKey: unknown, descriptor?: PropertyDescriptor): void {
     // TODO: デコレーターの処理の実装
   };
 }
@@ -105,7 +105,7 @@ export function OnUpdateCurrentTimestampColumn(options: ColumnOptions) {
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
    */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return function (target: object, propertyKey: string | symbol): void {
+  return function (target: unknown, propertyKey: unknown, descriptor?: PropertyDescriptor): void {
     // TODO: デコレーターの処理の実装
   };
 }

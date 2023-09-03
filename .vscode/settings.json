@@ -8,9 +8,10 @@
   "eslint.options": {
     "ignorePath": "./.eslintignore"
   },
-  "cSpell.words": ["inazma"],
+  "cSpell.words": ["inazma", "datetime"],
   "prettier.configPath": ".prettierrc",
   "typescript.preferences.importModuleSpecifier": "relative",
+  "typescript.tsdk": "node_modules/typescript/lib",
   // icons-theme
   "workbench.iconTheme": "vscode-icons",
   "vsicons.associations.files": [

@@ -10,6 +10,7 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "paths": {
       "typeExpress": ["./src/index.ts"],
       "*": ["*"],

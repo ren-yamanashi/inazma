@@ -122,12 +122,13 @@ export const generateStringColumnDecorator: GenerateStringColumnDecorator = (
   defaultValue: string | null,
   options: GenerateStringColumnDecoratorOptions,
 ): string => {
+  const _defaultValue = defaultValue === 'CURRENT_TIMESTAMP' ? 'NOW()' : defaultValue;
   const isUnique = [COLUMN_KEY.UNI, COLUMN_KEY.PRI].some((item) => item === column.key);
   const isPrimary = column.key === COLUMN_KEY.PRI;
   const decorator = options.convertColumnExtraToColumnDecorator(column.extra);
   const columnDecorator = `${decorator}({
 type: "${column.typeInDb}",
-default: ${defaultValue},
+default: ${_defaultValue},
 unsigned: ${column.unsigned},
 unique: ${isUnique},
 primary: ${isPrimary}
