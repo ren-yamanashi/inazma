@@ -5,6 +5,7 @@ import { IndexSchema, parseIndexes } from './parseIndex';
 import {
   generateStringFromSchema,
   generateStringEnumAndColumnsFromSchema,
+  generateStringColumnDecorator,
 } from './generateStringFromSchema';
 import { toUpperCamelCase } from './helpers/convertString';
 
@@ -77,6 +78,7 @@ const main = async () => {
     const stringSchema = generateStringFromSchema(tableSchemas, {
       toUpperCamelCase: toUpperCamelCase,
       generateStringEnumAndColumnsFromSchema: generateStringEnumAndColumnsFromSchema,
+      generateStringColumnDecorator: generateStringColumnDecorator,
     });
 
     // NOTE: schemaの出力

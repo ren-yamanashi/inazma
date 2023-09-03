@@ -2,8 +2,10 @@ import { matchFn } from './helpers/match';
 
 const defaultColumn: ColumnSchema = {
   field: '',
-  type: '',
+  typeInTs: '',
+  typeInDb: '',
   nullable: false,
+  unsigned: false,
   key: '',
   defaultValue: null,
   extra: '',
@@ -33,7 +35,9 @@ export type ColumnKey = (typeof COLUMN_KEY)[keyof typeof COLUMN_KEY];
 
 export type ColumnSchema = {
   field: string;
-  type: PrimitiveTypeString | string;
+  typeInTs: PrimitiveTypeString | string;
+  typeInDb: string;
+  unsigned: boolean;
   nullable: boolean;
   key: ColumnKey;
   defaultValue: null | string;
@@ -60,7 +64,9 @@ export const parseColumn = (
   if ('Key' in arg && typeof arg['Key'] === 'string') column.key = arg['Key'] as ColumnKey;
   if ('Extra' in arg && typeof arg['Extra'] === 'string') column.extra = arg['Extra'];
   if ('Type' in arg && typeof arg['Type'] === 'string') {
-    column.type = options.convertTypeFn(arg['Type']);
+    column.typeInTs = options.convertTypeFn(arg['Type']);
+    column.typeInDb = new String(arg['Type']).replace(/unsigned/g, '').trim();
+    column.unsigned = /unsigned/.test(arg['Type']);
   }
   if ('Default' in arg) {
     column.defaultValue = typeof arg['Default'] === 'string' ? arg['Default'] : null;
@@ -75,15 +81,18 @@ export const parseColumn = (
  */
 export const convertToPrimitiveTypeString = (arg: string): PrimitiveTypeString | string => {
   const res = matchFn<string>(arg.toUpperCase())
+    .with('INT', () => PRIMITIVE_TYPE.NUMBER)
     .with('TINYINT', () => PRIMITIVE_TYPE.NUMBER)
+    .with('INTEGER', () => PRIMITIVE_TYPE.NUMBER)
     .with('SMALLINT', () => PRIMITIVE_TYPE.NUMBER)
     .with('MEDIUMINT', () => PRIMITIVE_TYPE.NUMBER)
-    .with('INT', () => PRIMITIVE_TYPE.NUMBER)
     .with('BIGINT', () => PRIMITIVE_TYPE.NUMBER)
     .with('FLOAT', () => PRIMITIVE_TYPE.NUMBER)
     .with('DOUBLE', () => PRIMITIVE_TYPE.NUMBER)
     .with('YEAR', () => PRIMITIVE_TYPE.NUMBER)
-    .with('BIT', () => PRIMITIVE_TYPE.BOOLEAN)
+    .with('BIT', () => PRIMITIVE_TYPE.BIGINT)
+    .with('TINYINT(1)', () => PRIMITIVE_TYPE.BOOLEAN)
+    .with('BOOLEAN', () => PRIMITIVE_TYPE.BOOLEAN)
     .with('DATE', () => PRIMITIVE_TYPE.DATE)
     .with('DATETIME', () => PRIMITIVE_TYPE.DATE)
     .with('TIMESTAMP', () => PRIMITIVE_TYPE.DATE)
@@ -95,15 +104,10 @@ export const convertToPrimitiveTypeString = (arg: string): PrimitiveTypeString |
     .with('TEXT', () => PRIMITIVE_TYPE.STRING)
     .with('MEDIUMTEXT', () => PRIMITIVE_TYPE.STRING)
     .with('LONGTEXT', () => PRIMITIVE_TYPE.STRING)
-    .with('ENUM', () => arg)
-    .with('SET', () => PRIMITIVE_TYPE.STRING)
     .with('TIME', () => PRIMITIVE_TYPE.STRING)
-    .with('BINARY', () => PRIMITIVE_TYPE.UNKNOWN)
-    .with('VARBINARY', () => PRIMITIVE_TYPE.UNKNOWN)
-    .with('TINYBLOB', () => PRIMITIVE_TYPE.UNKNOWN)
-    .with('BLOB', () => PRIMITIVE_TYPE.UNKNOWN)
-    .with('MEDIUMBLOB', () => PRIMITIVE_TYPE.UNKNOWN)
-    .with('LONGBLOB', () => PRIMITIVE_TYPE.UNKNOWN)
+    // TODO: setはunion型にするので、`() => arg`で良いか検証
+    .with('SET', () => PRIMITIVE_TYPE.STRING)
+    .with('ENUM', () => arg)
     .otherwise(() => PRIMITIVE_TYPE.NULL)
     .execute();
 

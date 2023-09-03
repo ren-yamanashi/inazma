@@ -9,6 +9,7 @@
     "rootDir": "/",
     "outDir": "./dist",
     "baseUrl": ".",
+    "experimentalDecorators": true,
     "paths": {
       "typeExpress": ["./src/index.ts"],
       "*": ["*"],

@@ -20,9 +20,11 @@ describe('parseColumn', () => {
     // GIVEN: output (ColumnSchema)
     const expectedValue: ColumnSchema = {
       field: 'id',
-      type: 'number',
+      typeInDb: 'bigint',
+      typeInTs: 'number',
       nullable: false,
       key: COLUMN_KEY.PRI,
+      unsigned: true,
       defaultValue: null,
       extra: 'auto_increment',
     };
@@ -48,9 +50,11 @@ describe('parseColumn', () => {
     // GIVEN: output (TableSchema)
     const expectedValue: ColumnSchema = {
       field: 'status',
-      type: "enum('active','inactive','deleted')",
+      typeInDb: "enum('active','inactive','deleted')",
+      typeInTs: "enum('active','inactive','deleted')",
       nullable: false,
       key: COLUMN_KEY.PRI,
+      unsigned: false,
       defaultValue: null,
       extra: 'auto_increment',
     };
