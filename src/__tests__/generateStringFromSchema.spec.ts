@@ -1,9 +1,10 @@
 import {
+  convertColumnExtraToColumnDecorator,
   generateStringColumnDecorator,
   generateStringEnumAndColumnsFromSchema,
   generateStringFromSchema,
 } from '../generateStringFromSchema';
-import { ColumnSchema } from '../parseColumn';
+import { COLUMN_EXTRA, ColumnExtra, ColumnSchema } from '../parseColumn';
 import { toUpperCamelCase } from '../helpers/convertString';
 import {
   columnIncludeEnumSchemasDummy,
@@ -12,31 +13,106 @@ import {
 } from '../__mocks__/columnSchema.dummy';
 import { TableSchema } from '../index';
 import { tableSchemaDummy } from '../__mocks__/tableSchema.dummy';
+import { COLUMN_DECORATOR, ColumnDecorator } from '../decorator/column';
 
-describe('generateStringColumnDecorator', () => {
-  it('正常に生成される(defaultValueの指定がない)', () => {
-    // GIVEN: input(ColumnSchema)
-    const columnSchema: ColumnSchema = columnSchemaDummy;
+describe('convertColumnExtraToColumnDecorator', () => {
+  it('extraが`auto_increment`の場合', () => {
+    // GIVEN: input(ColumnExtra)
+    const extra: ColumnExtra = COLUMN_EXTRA.AUTO_INCREMENT;
 
-    // GIVEN: output(column)
-    const column = `@Column({\ntype: \"bigint\",\ndefault: null,\nunsigned: true,\nunique: true,\nprimary: true\n})`;
+    // GIVEN: output(ColumnDecorator)
+    const decorator: ColumnDecorator = COLUMN_DECORATOR.AUTO_INCREMENT_COLUMN;
 
     // WHEN
-    const result = generateStringColumnDecorator(columnSchema);
+    const result = convertColumnExtraToColumnDecorator(extra);
 
     // THEN
-    expect(result).toEqual(column);
+    expect(result).toEqual(decorator);
   });
 
-  it('正常に生成される(defaultValueの指定がある)', () => {
+  it('extraが`DEFAULT_GENERATED`の場合', () => {
+    // GIVEN: input(ColumnExtra)
+    const extra: ColumnExtra = COLUMN_EXTRA.DEFAULT_GENERATED;
+
+    // GIVEN: output(ColumnDecorator)
+    const decorator: ColumnDecorator = COLUMN_DECORATOR.DEFAULT_GENERATED_COLUMN;
+
+    // WHEN
+    const result = convertColumnExtraToColumnDecorator(extra);
+
+    // THEN
+    expect(result).toEqual(decorator);
+  });
+
+  it('extraが`VIRTUAL GENERATED`の場合', () => {
+    // GIVEN: input(ColumnExtra)
+    const extra: ColumnExtra = COLUMN_EXTRA.VIRTUAL_GENERATED;
+
+    // GIVEN: output(ColumnDecorator)
+    const decorator: ColumnDecorator = COLUMN_DECORATOR.VIRTUAL_GENERATED_COLUMN;
+
+    // WHEN
+    const result = convertColumnExtraToColumnDecorator(extra);
+
+    // THEN
+    expect(result).toEqual(decorator);
+  });
+
+  it('extraが`STORED GENERATED`の場合', () => {
+    // GIVEN: input(ColumnExtra)
+    const extra: ColumnExtra = COLUMN_EXTRA.STORED_GENERATED;
+
+    // GIVEN: output(ColumnDecorator)
+    const decorator: ColumnDecorator = COLUMN_DECORATOR.STORED_GENERATED_COLUMN;
+
+    // WHEN
+    const result = convertColumnExtraToColumnDecorator(extra);
+
+    // THEN
+    expect(result).toEqual(decorator);
+  });
+
+  it('extraが`on update CURRENT_TIMESTAMP`の場合', () => {
+    // GIVEN: input(ColumnExtra)
+    const extra: ColumnExtra = COLUMN_EXTRA.ON_UPDATE_CURRENT_TIMESTAMP;
+
+    // GIVEN: output(ColumnDecorator)
+    const decorator: ColumnDecorator = COLUMN_DECORATOR.ON_UPDATE_CURRENT_TIMESTAMP_COLUMN;
+
+    // WHEN
+    const result = convertColumnExtraToColumnDecorator(extra);
+
+    // THEN
+    expect(result).toEqual(decorator);
+  });
+
+  it('extraが空文字の場合', () => {
+    // GIVEN: input(ColumnExtra)
+    const extra: ColumnExtra = COLUMN_EXTRA.NONE;
+
+    // GIVEN: output(ColumnDecorator)
+    const decorator: ColumnDecorator = COLUMN_DECORATOR.COLUMN;
+
+    // WHEN
+    const result = convertColumnExtraToColumnDecorator(extra);
+
+    // THEN
+    expect(result).toEqual(decorator);
+  });
+});
+
+describe('generateStringColumnDecorator', () => {
+  it('正常に生成される', () => {
     // GIVEN: input(ColumnSchema)
     const columnSchema: ColumnSchema = columnSchemaDummy;
 
     // GIVEN: output(column)
-    const column = `@Column({\ntype: \"bigint\",\ndefault: 0,\nunsigned: true,\nunique: true,\nprimary: true\n})`;
+    const column = `@AutoIncrementColumn({\ntype: \"bigint\",\ndefault: null,\nunsigned: true,\nunique: true,\nprimary: true\n})`;
 
     // WHEN
-    const result = generateStringColumnDecorator(columnSchema, '0');
+    const result = generateStringColumnDecorator(columnSchema, columnSchema.defaultValue, {
+      convertColumnExtraToColumnDecorator: convertColumnExtraToColumnDecorator,
+    });
 
     // THEN
     expect(result).toEqual(column);
@@ -50,11 +126,11 @@ describe('generateStringEnumAndColumnsFromSchema', () => {
 
     // GIVEN: output(columns)
     const columns = [
-      `@Column({\ntype: \"bigint\",\ndefault: null,\nunsigned: true,\nunique: true,\nprimary: true\n})\nid: number;\n`,
+      `@AutoIncrementColumn({\ntype: \"bigint\",\ndefault: null,\nunsigned: true,\nunique: true,\nprimary: true\n})\nid: number;\n`,
       `@Column({\ntype: \"varchar(255)\",\ndefault: null,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncontent: string | null;\n`,
       `@Column({\ntype: \"int\",\ndefault: 0,\nunsigned: true,\nunique: false,\nprimary: false\n})\norder: number;\n`,
       `@Column({\ntype: \"enum('active','inactive','deleted')\",\ndefault: Status.active,\nunsigned: false,\nunique: false,\nprimary: false\n})\nstatus: Status;\n`,
-      `@Column({\ntype: \"datatime\",\ndefault: CURRENT_TIMESTAMP,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
+      `@DefaultGeneratedColumn({\ntype: \"datatime\",\ndefault: CURRENT_TIMESTAMP,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
     ];
     // GIVEN: output(enums)
     const enums = [
@@ -69,6 +145,7 @@ deleted
     const result = generateStringEnumAndColumnsFromSchema(columnSchemas, {
       toUpperCamelCase: toUpperCamelCase,
       generateStringColumnDecorator: generateStringColumnDecorator,
+      convertColumnExtraToColumnDecorator: convertColumnExtraToColumnDecorator,
     });
 
     // THEN
@@ -81,16 +158,17 @@ deleted
 
     // GIVEN: output(columns)
     const columns = [
-      `@Column({\ntype: \"bigint\",\ndefault: null,\nunsigned: true,\nunique: true,\nprimary: true\n})\nid: number;\n`,
+      `@AutoIncrementColumn({\ntype: \"bigint\",\ndefault: null,\nunsigned: true,\nunique: true,\nprimary: true\n})\nid: number;\n`,
       `@Column({\ntype: \"varchar(255)\",\ndefault: null,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncontent: string | null;\n`,
       `@Column({\ntype: \"int\",\ndefault: 0,\nunsigned: true,\nunique: false,\nprimary: false\n})\norder: number;\n`,
-      `@Column({\ntype: \"datatime\",\ndefault: CURRENT_TIMESTAMP,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
+      `@DefaultGeneratedColumn({\ntype: \"datatime\",\ndefault: CURRENT_TIMESTAMP,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
     ];
 
     // WHEN
     const result = generateStringEnumAndColumnsFromSchema(columnSchemas, {
       toUpperCamelCase: toUpperCamelCase,
       generateStringColumnDecorator: generateStringColumnDecorator,
+      convertColumnExtraToColumnDecorator: convertColumnExtraToColumnDecorator,
     });
 
     // THEN
@@ -111,7 +189,7 @@ deleted
 };
 
 class Sample {
-@Column({
+@AutoIncrementColumn({
 type: "bigint",
 default: null,
 unsigned: true,
@@ -147,7 +225,7 @@ primary: false
 })
 status: Status;
 
-@Column({
+@DefaultGeneratedColumn({
 type: "datatime",
 default: CURRENT_TIMESTAMP,
 unsigned: false,
@@ -164,6 +242,7 @@ createdDate: Date;
       toUpperCamelCase: toUpperCamelCase,
       generateStringEnumAndColumnsFromSchema: generateStringEnumAndColumnsFromSchema,
       generateStringColumnDecorator: generateStringColumnDecorator,
+      convertColumnExtraToColumnDecorator: convertColumnExtraToColumnDecorator,
     });
 
     // THEN

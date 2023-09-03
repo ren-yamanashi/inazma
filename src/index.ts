@@ -6,6 +6,7 @@ import {
   generateStringFromSchema,
   generateStringEnumAndColumnsFromSchema,
   generateStringColumnDecorator,
+  convertColumnExtraToColumnDecorator,
 } from './generateStringFromSchema';
 import { toUpperCamelCase } from './helpers/convertString';
 
@@ -79,6 +80,7 @@ const main = async () => {
       toUpperCamelCase: toUpperCamelCase,
       generateStringEnumAndColumnsFromSchema: generateStringEnumAndColumnsFromSchema,
       generateStringColumnDecorator: generateStringColumnDecorator,
+      convertColumnExtraToColumnDecorator: convertColumnExtraToColumnDecorator,
     });
 
     // NOTE: schemaの出力

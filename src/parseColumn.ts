@@ -18,6 +18,15 @@ export const COLUMN_KEY = {
   NONE: '',
 } as const;
 
+export const COLUMN_EXTRA = {
+  AUTO_INCREMENT: 'auto_increment',
+  DEFAULT_GENERATED: 'DEFAULT_GENERATED',
+  VIRTUAL_GENERATED: 'VIRTUAL_GENERATED',
+  STORED_GENERATED: 'STORED_GENERATED',
+  ON_UPDATE_CURRENT_TIMESTAMP: 'on update CURRENT_TIMESTAMP',
+  NONE: '',
+} as const;
+
 export const PRIMITIVE_TYPE = {
   NUMBER: 'number',
   BIGINT: 'bigint',
@@ -27,11 +36,13 @@ export const PRIMITIVE_TYPE = {
   UNDEFINED: 'undefined',
   DATE: 'Date',
   UNKNOWN: 'unknown',
-};
+} as const;
 
 export type PrimitiveTypeString = (typeof PRIMITIVE_TYPE)[keyof typeof PRIMITIVE_TYPE];
 
 export type ColumnKey = (typeof COLUMN_KEY)[keyof typeof COLUMN_KEY];
+
+export type ColumnExtra = (typeof COLUMN_EXTRA)[keyof typeof COLUMN_EXTRA];
 
 export type ColumnSchema = {
   field: string;
@@ -41,11 +52,11 @@ export type ColumnSchema = {
   nullable: boolean;
   key: ColumnKey;
   defaultValue: null | string;
-  extra: string;
+  extra: ColumnExtra;
 };
 
 type ParseOptions = {
-  convertTypeFn: (type: string) => PrimitiveTypeString;
+  convertTypeFn: (type: string) => PrimitiveTypeString | string;
 };
 
 /**
@@ -62,7 +73,9 @@ export const parseColumn = (
   if ('Field' in arg && typeof arg['Field'] === 'string') column.field = arg['Field'];
   if ('Null' in arg) column.nullable = arg['Null'] === 'YES';
   if ('Key' in arg && typeof arg['Key'] === 'string') column.key = arg['Key'] as ColumnKey;
-  if ('Extra' in arg && typeof arg['Extra'] === 'string') column.extra = arg['Extra'];
+  if ('Extra' in arg && typeof arg['Extra'] === 'string') {
+    column.extra = arg['Extra'] as ColumnExtra;
+  }
   if ('Type' in arg && typeof arg['Type'] === 'string') {
     column.typeInTs = options.convertTypeFn(arg['Type']);
     column.typeInDb = new String(arg['Type']).replace(/unsigned/g, '').trim();
