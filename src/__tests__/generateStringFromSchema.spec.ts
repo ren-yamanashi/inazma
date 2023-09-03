@@ -4,7 +4,7 @@ import {
   columnSchemaDummy,
 } from '../__mocks__/columnSchema.dummy';
 import { tableSchemaDummy } from '../__mocks__/tableSchema.dummy';
-import { COLUMN_DECORATOR, ColumnDecorator } from '../decorator/column.decorator';
+
 import {
   convertColumnExtraToColumnDecorator,
   generateStringColumnDecorator,
@@ -13,6 +13,7 @@ import {
 } from '../generateStringFromSchema';
 import { toUpperCamelCase } from '../helpers/convertString';
 import { COLUMN_EXTRA, ColumnExtra } from '../types/column.type';
+import { COLUMN_DECORATOR, ColumnDecorator } from '../types/decorator.type';
 import { ColumnSchema, TableSchema } from '../types/schema.type';
 
 describe('convertColumnExtraToColumnDecorator', () => {

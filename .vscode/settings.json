@@ -79,7 +79,7 @@
   "vsicons.associations.folders": [
     {
       "icon": "chef",
-      "extensions": ["decorator"],
+      "extensions": ["decorators"],
       "format": "svg"
     },
     {

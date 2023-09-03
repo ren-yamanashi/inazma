@@ -6,7 +6,7 @@ import {
   onUpdateCurrentTimestampColumnDecorator,
   storedGeneratedColumnDecorator,
   virtualGeneratedColumnDecorator,
-} from './decorator/column.decorator';
+} from './decorators/column.decorator';
 import { registerContainer } from './di';
 import { getNowDate } from './helpers/datetime';
 

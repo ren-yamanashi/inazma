@@ -1,5 +1,5 @@
-import { COLUMN_DECORATOR, ColumnDecorator } from './decorator/column.decorator';
 import { COLUMN_EXTRA, COLUMN_KEY, ColumnExtra } from './types/column.type';
+import { COLUMN_DECORATOR, ColumnDecorator } from './types/decorator.type';
 import { ColumnSchema, TableSchema } from './types/schema.type';
 
 type GenerateStringFromSchemaOptions = {
