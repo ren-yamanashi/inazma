@@ -1,0 +1,42 @@
+export const columnDummy = [
+  {
+    Field: 'id',
+    Type: 'bigint unsigned',
+    Null: 'NO',
+    Key: 'PRI',
+    Default: null,
+    Extra: 'auto_increment',
+  },
+  {
+    Field: 'content',
+    Type: 'varchar(255)',
+    Null: 'YES',
+    Key: '',
+    Default: null,
+    Extra: '',
+  },
+  {
+    Field: 'order',
+    Type: 'int unsigned',
+    Null: 'NO',
+    Key: '',
+    Default: '0',
+    Extra: '',
+  },
+  {
+    Field: 'status',
+    Type: "enum('active','inactive','deleted')",
+    Null: 'NO',
+    Key: '',
+    Default: 'active',
+    Extra: '',
+  },
+  {
+    Field: 'createdDate',
+    Type: 'datetime',
+    Null: 'NO',
+    Key: '',
+    Default: 'CURRENT_TIMESTAMP',
+    Extra: 'DEFAULT_GENERATED',
+  },
+];

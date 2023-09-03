@@ -12,8 +12,8 @@ import {
   generateStringFromSchema,
 } from '../generateStringFromSchema';
 import { toUpperCamelCase } from '../helpers/convertString';
-import { TableSchema } from '../index';
-import { COLUMN_EXTRA, ColumnExtra, ColumnSchema } from '../parseColumn';
+import { COLUMN_EXTRA, ColumnExtra } from '../types/column.type';
+import { ColumnSchema, TableSchema } from '../types/schema.type';
 
 describe('convertColumnExtraToColumnDecorator', () => {
   it('extraが`auto_increment`の場合', () => {

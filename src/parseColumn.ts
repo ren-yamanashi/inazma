@@ -1,4 +1,7 @@
 import { matchFn } from './helpers/match';
+import { ColumnExtra, ColumnKey } from './types/column.type';
+import { PRIMITIVE_TYPE, PrimitiveTypeString } from './types/primitive.type';
+import { ColumnSchema } from './types/schema.type';
 
 const defaultColumn: ColumnSchema = {
   field: '',
@@ -9,50 +12,6 @@ const defaultColumn: ColumnSchema = {
   key: '',
   defaultValue: null,
   extra: '',
-};
-
-export const COLUMN_KEY = {
-  PRI: 'PRI',
-  UNI: 'UNI',
-  MUL: 'MUL',
-  NONE: '',
-} as const;
-
-export const COLUMN_EXTRA = {
-  AUTO_INCREMENT: 'auto_increment',
-  DEFAULT_GENERATED: 'DEFAULT_GENERATED',
-  VIRTUAL_GENERATED: 'VIRTUAL_GENERATED',
-  STORED_GENERATED: 'STORED_GENERATED',
-  ON_UPDATE_CURRENT_TIMESTAMP: 'on update CURRENT_TIMESTAMP',
-  NONE: '',
-} as const;
-
-export const PRIMITIVE_TYPE = {
-  NUMBER: 'number',
-  BIGINT: 'bigint',
-  STRING: 'string',
-  BOOLEAN: 'boolean',
-  NULL: 'null',
-  UNDEFINED: 'undefined',
-  DATE: 'Date',
-  UNKNOWN: 'unknown',
-} as const;
-
-export type PrimitiveTypeString = (typeof PRIMITIVE_TYPE)[keyof typeof PRIMITIVE_TYPE];
-
-export type ColumnKey = (typeof COLUMN_KEY)[keyof typeof COLUMN_KEY];
-
-export type ColumnExtra = (typeof COLUMN_EXTRA)[keyof typeof COLUMN_EXTRA];
-
-export type ColumnSchema = {
-  field: string;
-  typeInTs: PrimitiveTypeString | string;
-  typeInDb: string;
-  unsigned: boolean;
-  nullable: boolean;
-  key: ColumnKey;
-  defaultValue: null | string;
-  extra: ColumnExtra;
 };
 
 type ParseOptions = {

@@ -1,4 +1,5 @@
-import { IndexSchema, parseIndexes } from '../parseIndex';
+import { parseIndexes } from '../parseIndex';
+import { IndexSchema } from '../types/schema.type';
 
 describe('parseIndex', () => {
   it('正常にparseされる', () => {

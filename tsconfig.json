@@ -8,17 +8,16 @@
     "sourceMap": true,
     "rootDir": "/",
     "outDir": "./dist",
-    "baseUrl": ".",
+    "baseUrl": "./",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
-      "typeExpress": ["./src/index.ts"],
-      "*": ["*"],
-      "~/*": ["./*"]
+      "inazma": ["src/index.ts"],
     },
     "moduleResolution": "node"
   },
   "include": [
+    "sample/db.schema.ts",
     "src/**/*",
     "src/__tests__/**/*"
   ],

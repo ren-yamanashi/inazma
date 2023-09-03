@@ -1,14 +1,9 @@
-const KEY_NAME_PROPERTY = 'Key_name';
-const COLUMN_NAME_PROPERTY = 'Column_name';
-const NON_UNIQUE_PROPERTY = 'Non_unique';
-
-export type IndexSchema = {
-  keyName: string;
-  unique: boolean;
-  columnNames: string[];
-};
+import { IndexSchema } from './types/schema.type';
 
 export const parseIndexes = (args: { [key: string]: unknown }[]): IndexSchema[] => {
+  const KEY_NAME_PROPERTY = 'Key_name';
+  const COLUMN_NAME_PROPERTY = 'Column_name';
+  const NON_UNIQUE_PROPERTY = 'Non_unique';
   const indexes: { [key: string]: IndexSchema } = {};
 
   for (const arg of args) {

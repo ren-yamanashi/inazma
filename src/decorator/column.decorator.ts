@@ -24,7 +24,7 @@ export interface ColumnOptions {
  */
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function Column(options: ColumnOptions) {
+export function columnDecorator(options: ColumnOptions) {
   /**
    * @param {Object} target - デコレーターが適用されるクラスのプロトタイプ
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
@@ -39,7 +39,7 @@ export function Column(options: ColumnOptions) {
  * extraの結果が`auto_increment`
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function AutoIncrementColumn(options: ColumnOptions) {
+export function autoIncrementColumnDecorator(options: ColumnOptions) {
   /**
    * @param {Object} target - デコレーターが適用されるクラスのプロトタイプ
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
@@ -54,7 +54,7 @@ export function AutoIncrementColumn(options: ColumnOptions) {
  * extraの結果が`VIRTUAL_GENERATED`
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function VirtualGeneratedColumn(options: ColumnOptions) {
+export function virtualGeneratedColumnDecorator(options: ColumnOptions) {
   /**
    * @param {Object} target - デコレーターが適用されるクラスのプロトタイプ
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
@@ -69,7 +69,7 @@ export function VirtualGeneratedColumn(options: ColumnOptions) {
  * extraの結果が`STORED GENERATED`
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function StoredGeneratedColumn(options: ColumnOptions) {
+export function storedGeneratedColumnDecorator(options: ColumnOptions) {
   /**
    * @param {Object} target - デコレーターが適用されるクラスのプロトタイプ
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
@@ -84,7 +84,7 @@ export function StoredGeneratedColumn(options: ColumnOptions) {
  * extraの結果が`DEFAULT GENERATED`
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function DefaultGeneratedColumn(options: ColumnOptions) {
+export function defaultGeneratedColumnDecorator(options: ColumnOptions) {
   /**
    * @param {Object} target - デコレーターが適用されるクラスのプロトタイプ
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前
@@ -99,7 +99,7 @@ export function DefaultGeneratedColumn(options: ColumnOptions) {
  * extraの結果が`on update CURRENT_TIMESTAMP`
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function OnUpdateCurrentTimestampColumn(options: ColumnOptions) {
+export function onUpdateCurrentTimestampColumnDecorator(options: ColumnOptions) {
   /**
    * @param {Object} target - デコレーターが適用されるクラスのプロトタイプ
    * @param {string | symbol} propertyKey - デコレーターが適用されるプロパティの名前

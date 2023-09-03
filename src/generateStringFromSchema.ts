@@ -1,6 +1,6 @@
 import { COLUMN_DECORATOR, ColumnDecorator } from './decorator/column.decorator';
-import { TableSchema } from './index';
-import { COLUMN_EXTRA, COLUMN_KEY, ColumnExtra, ColumnSchema } from './parseColumn';
+import { COLUMN_EXTRA, COLUMN_KEY, ColumnExtra } from './types/column.type';
+import { ColumnSchema, TableSchema } from './types/schema.type';
 
 type GenerateStringFromSchemaOptions = {
   toUpperCamelCase: (arg: string) => string;

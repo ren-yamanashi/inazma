@@ -1,4 +1,4 @@
-import { ColumnSchema } from '../parseColumn';
+import { ColumnSchema } from '../types/schema.type';
 
 export const columnSchemaDummy: ColumnSchema = {
   field: 'id',

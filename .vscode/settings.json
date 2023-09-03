@@ -35,7 +35,7 @@
     },
     {
       "icon": "typescriptdef",
-      "extensions": ["type.ts"],
+      "extensions": ["type.ts", "interface.ts"],
       "format": "svg",
       "filename": false
     },
@@ -46,8 +46,14 @@
       "filename": false
     },
     {
-      "icon": "test",
+      "icon": "bazel",
       "extensions": ["dummy.ts", "mock.ts", "stub.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "rust_toolchain",
+      "extensions": ["infrastructure.ts"],
       "format": "svg",
       "filename": false
     },
@@ -56,20 +62,35 @@
       "extensions": ["index.ts"],
       "format": "svg",
       "filename": true
+    },
+    {
+      "icon": "formkit",
+      "extensions": ["command.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "dependencies",
+      "extensions": ["di.ts"],
+      "format": "svg",
+      "filename": true
     }
   ],
   "vsicons.associations.folders": [
     {
       "icon": "chef",
       "extensions": ["decorator"],
-      "format": "svg",
-      "filename": false
+      "format": "svg"
     },
     {
       "icon": "devcontainer",
       "extensions": ["sample"],
-      "format": "svg",
-      "filename": false
+      "format": "svg"
+    },
+    {
+      "icon": "tools",
+      "extensions": ["infrastructures"],
+      "format": "svg"
     }
   ]
 }
