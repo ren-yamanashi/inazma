@@ -1,19 +1,19 @@
 import {
+  columnIncludeEnumSchemasDummy,
+  columnNotIncludeEnumSchemasDummy,
+  columnSchemaDummy,
+} from '../__mocks__/columnSchema.dummy';
+import { tableSchemaDummy } from '../__mocks__/tableSchema.dummy';
+import { COLUMN_DECORATOR, ColumnDecorator } from '../decorator/column.decorator';
+import {
   convertColumnExtraToColumnDecorator,
   generateStringColumnDecorator,
   generateStringEnumAndColumnsFromSchema,
   generateStringFromSchema,
 } from '../generateStringFromSchema';
-import { COLUMN_EXTRA, ColumnExtra, ColumnSchema } from '../parseColumn';
 import { toUpperCamelCase } from '../helpers/convertString';
-import {
-  columnIncludeEnumSchemasDummy,
-  columnNotIncludeEnumSchemasDummy,
-  columnSchemaDummy,
-} from '../__mocks__/columnSchema.dummy';
 import { TableSchema } from '../index';
-import { tableSchemaDummy } from '../__mocks__/tableSchema.dummy';
-import { COLUMN_DECORATOR, ColumnDecorator } from '../decorator/column';
+import { COLUMN_EXTRA, ColumnExtra, ColumnSchema } from '../parseColumn';
 
 describe('convertColumnExtraToColumnDecorator', () => {
   it('extraが`auto_increment`の場合', () => {

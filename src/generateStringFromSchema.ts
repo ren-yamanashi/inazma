@@ -1,4 +1,4 @@
-import { COLUMN_DECORATOR, ColumnDecorator } from './decorator/column';
+import { COLUMN_DECORATOR, ColumnDecorator } from './decorator/column.decorator';
 import { TableSchema } from './index';
 import { COLUMN_EXTRA, COLUMN_KEY, ColumnExtra, ColumnSchema } from './parseColumn';
 

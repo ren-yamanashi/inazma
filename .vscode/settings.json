@@ -1,5 +1,74 @@
 {
-    "cSpell.words": [
-        "inazma"
-    ]
+  // formatter
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnType": true,
+  "editor.codeActionsOnSave": ["source.organizeImports", "source.fixAll.eslint"],
+  "eslint.options": {
+    "ignorePath": "./.eslintignore"
+  },
+  "cSpell.words": ["inazma"],
+  "prettier.configPath": ".prettierrc",
+  "typescript.preferences.importModuleSpecifier": "relative",
+  // icons-theme
+  "workbench.iconTheme": "vscode-icons",
+  "vsicons.associations.files": [
+    {
+      "icon": "modernizr",
+      "extensions": ["error.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "bazel",
+      "extensions": ["stub.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "typescriptdef",
+      "extensions": ["type.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "typescriptdef",
+      "extensions": ["type.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "razor",
+      "extensions": ["decorator.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "test",
+      "extensions": ["dummy.ts", "mock.ts", "stub.ts"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "source",
+      "extensions": ["index.ts"],
+      "format": "svg",
+      "filename": true
+    }
+  ],
+  "vsicons.associations.folders": [
+    {
+      "icon": "chef",
+      "extensions": ["decorator"],
+      "format": "svg",
+      "filename": false
+    },
+    {
+      "icon": "devcontainer",
+      "extensions": ["sample"],
+      "format": "svg",
+      "filename": false
+    }
+  ]
 }
