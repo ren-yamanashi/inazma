@@ -16,14 +16,11 @@ export const showColumnsQuery = async (
 ): Promise<ColumnSchema[] | Error> => {
   try {
     const columns = await mysqlClient.queryAsync('SHOW COLUMNS FROM ??', [tableName]);
-    // TODO: エラーハンドリングを考える
     if (!options.isArrayOfObjects(columns)) throw new Error('parseError');
-    const res = columns.map((column) =>
+    return columns.map((column) =>
       options.parseColumn(column, { convertTypeFn: options.convertTypeFn }),
     );
-    return res;
   } catch (error) {
-    // TODO: エラーハンドリングを考える
     return new Error('parseError');
   }
 };

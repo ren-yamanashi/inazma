@@ -13,11 +13,9 @@ export const showIndexQuery = async (
 ): Promise<IndexSchema[] | Error> => {
   try {
     const indexes = await mysqlClient.queryAsync('SHOW INDEX FROM ??', [tableName]);
-    // TODO: エラーハンドリングを考える
     if (!options.isArrayOfObjects(indexes)) throw new Error('parseError');
     return options.parseIndexes(indexes);
   } catch (error) {
-    // TODO: エラーハンドリングを考える
     return new Error('parseError');
   }
 };

@@ -37,7 +37,6 @@ export const schemaGen = async (mysqlClientConfig: MysqlConnectionConfig): Promi
         parseIndexes: parseIndexes,
         isArrayOfObjects: isArrayOfObjects,
       });
-      // TODO: エラーハンドリングを考える
       if (indexes instanceof Error) throw new Error('parseError');
 
       const columns = await showColumnsQuery(tableName, mysqlClient, {
@@ -45,7 +44,6 @@ export const schemaGen = async (mysqlClientConfig: MysqlConnectionConfig): Promi
         isArrayOfObjects: isArrayOfObjects,
         convertTypeFn: convertToPrimitiveTypeString,
       });
-      // TODO: エラーハンドリングを考える
       if (columns instanceof Error) throw new Error('parseError');
 
       // NOTE: table作成
