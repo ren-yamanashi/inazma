@@ -9,7 +9,7 @@ export class MysqlClientMock implements MysqlClientInterface {
   public queryAsync(query: string) {
     return new Promise((resolve) => {
       if (query === 'SHOW TABLES') {
-        resolve([{ tables: 'sample' }]);
+        resolve([{ Tables_in_sample: 'sample' }]);
       }
       if (query === 'SHOW INDEX FROM ??') {
         resolve(indexDummy);

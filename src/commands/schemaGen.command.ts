@@ -13,6 +13,7 @@ import { convertToPrimitiveTypeString, parseColumn } from '../parseColumn';
 import { parseIndexes } from '../parseIndex';
 import { showColumnsQuery } from '../queries/showColumns.query';
 import { showIndexQuery } from '../queries/showIndex.query';
+import { showTablesQuery } from '../queries/showTables.query';
 import { TableSchema } from '../types/schema.type';
 
 export const schemaGen = async (mysqlClientConfig: MysqlConnectionConfig): Promise<void> => {
@@ -23,23 +24,20 @@ export const schemaGen = async (mysqlClientConfig: MysqlConnectionConfig): Promi
     mysqlClient.startConnection(mysqlClientConfig);
 
     // NOTE: table一覧の取得
-    const tables = await mysqlClient.queryAsync('SHOW TABLES');
-    if (!Array.isArray(tables)) return;
-    const tableNames = tables.map((val) => Object.values(val)).flat();
+    const tables = await showTablesQuery(mysqlClient, { isArrayOfObjects: isArrayOfObjects });
+    if (tables instanceof Error) throw new Error('parseError');
     const tableSchemas: TableSchema[] = [];
 
     // NOTE: 取得したtable情報をもとにTableSchemaを生成
-    for (const tableName of tableNames) {
-      if (typeof tableName !== 'string') continue;
-
+    for (const table of tables) {
       // NOTE: クエリの実行
-      const indexes = await showIndexQuery(tableName, mysqlClient, {
+      const indexes = await showIndexQuery(table.tableName, mysqlClient, {
         parseIndexes: parseIndexes,
         isArrayOfObjects: isArrayOfObjects,
       });
       if (indexes instanceof Error) throw new Error('parseError');
 
-      const columns = await showColumnsQuery(tableName, mysqlClient, {
+      const columns = await showColumnsQuery(table.tableName, mysqlClient, {
         parseColumn: parseColumn,
         isArrayOfObjects: isArrayOfObjects,
         convertTypeFn: convertToPrimitiveTypeString,
@@ -47,7 +45,7 @@ export const schemaGen = async (mysqlClientConfig: MysqlConnectionConfig): Promi
       if (columns instanceof Error) throw new Error('parseError');
 
       // NOTE: table作成
-      tableSchemas.push({ name: tableName, indexes, columns });
+      tableSchemas.push({ name: table.tableName, indexes, columns });
     }
 
     // NOTE: schemaの作成
