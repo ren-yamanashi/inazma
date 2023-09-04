@@ -1,5 +1,9 @@
 import { IndexSchema } from './types/schema.type';
 
+export interface ParseIndexes {
+  (args: { [key: string]: unknown }[]): IndexSchema[];
+}
+
 export const parseIndexes = (args: { [key: string]: unknown }[]): IndexSchema[] => {
   const KEY_NAME_PROPERTY = 'Key_name';
   const COLUMN_NAME_PROPERTY = 'Column_name';

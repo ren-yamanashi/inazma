@@ -131,7 +131,7 @@ describe('generateStringEnumAndColumnsFromSchema', () => {
       `@Column({\ntype: \"varchar(255)\",\ndefault: null,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncontent: string | null;\n`,
       `@Column({\ntype: \"int\",\ndefault: 0,\nunsigned: true,\nunique: false,\nprimary: false\n})\norder: number;\n`,
       `@Column({\ntype: \"enum('active','inactive','deleted')\",\ndefault: Status.active,\nunsigned: false,\nunique: false,\nprimary: false\n})\nstatus: Status;\n`,
-      `@DefaultGeneratedColumn({\ntype: \"datatime\",\ndefault: NOW(),\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
+      `@DefaultGeneratedColumn({\ntype: \"datetime\",\ndefault: NOW(),\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
     ];
     // GIVEN: output(enums)
     const enums = [
@@ -162,7 +162,7 @@ deleted
       `@AutoIncrementColumn({\ntype: \"bigint\",\ndefault: null,\nunsigned: true,\nunique: true,\nprimary: true\n})\nid: number;\n`,
       `@Column({\ntype: \"varchar(255)\",\ndefault: null,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncontent: string | null;\n`,
       `@Column({\ntype: \"int\",\ndefault: 0,\nunsigned: true,\nunique: false,\nprimary: false\n})\norder: number;\n`,
-      `@DefaultGeneratedColumn({\ntype: \"datatime\",\ndefault: NOW(),\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
+      `@DefaultGeneratedColumn({\ntype: \"datetime\",\ndefault: NOW(),\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
     ];
 
     // WHEN
@@ -189,6 +189,10 @@ inactive,
 deleted
 };
 
+@Index("id_contents_idx", ["id", "content"], {
+unique: false
+})
+@Entity("sample")
 class Sample {
 @AutoIncrementColumn({
 type: "bigint",
@@ -227,14 +231,13 @@ primary: false
 status: Status;
 
 @DefaultGeneratedColumn({
-type: "datatime",
+type: "datetime",
 default: NOW(),
 unsigned: false,
 unique: false,
 primary: false
 })
 createdDate: Date;
-
 };
 `;
 

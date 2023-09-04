@@ -7,9 +7,12 @@ import {
   generateStringFromSchema,
 } from '../generateStringFromSchema';
 import { toUpperCamelCase } from '../helpers/convertString';
+import { isArrayOfObjects } from '../helpers/typeCheck';
 import { MysqlConnectionConfig } from '../interfaces/mysql.interface';
 import { convertToPrimitiveTypeString, parseColumn } from '../parseColumn';
 import { parseIndexes } from '../parseIndex';
+import { showColumnsQuery } from '../queries/showColumns.query';
+import { showIndexQuery } from '../queries/showIndex.query';
 import { TableSchema } from '../types/schema.type';
 
 export const schemaGen = async (mysqlClientConfig: MysqlConnectionConfig): Promise<void> => {
@@ -30,18 +33,23 @@ export const schemaGen = async (mysqlClientConfig: MysqlConnectionConfig): Promi
       if (typeof tableName !== 'string') continue;
 
       // NOTE: クエリの実行
-      const indexes = await mysqlClient.queryAsync('SHOW INDEX FROM ??', [tableName]);
-      const columns = await mysqlClient.queryAsync('SHOW COLUMNS FROM ??', [tableName]);
-      if (!Array.isArray(columns) || !Array.isArray(indexes)) continue;
+      const indexes = await showIndexQuery(tableName, mysqlClient, {
+        parseIndexes: parseIndexes,
+        isArrayOfObjects: isArrayOfObjects,
+      });
+      // TODO: エラーハンドリングを考える
+      if (indexes instanceof Error) throw new Error('parseError');
 
-      // NOTE: クエリの結果をparse
-      const parsedIndexes = parseIndexes(indexes);
-      const parsedColumns = columns.map((column) =>
-        parseColumn(column, { convertTypeFn: convertToPrimitiveTypeString }),
-      );
+      const columns = await showColumnsQuery(tableName, mysqlClient, {
+        parseColumn: parseColumn,
+        isArrayOfObjects: isArrayOfObjects,
+        convertTypeFn: convertToPrimitiveTypeString,
+      });
+      // TODO: エラーハンドリングを考える
+      if (columns instanceof Error) throw new Error('parseError');
 
       // NOTE: table作成
-      tableSchemas.push({ name: tableName, indexes: parsedIndexes, columns: parsedColumns });
+      tableSchemas.push({ name: tableName, indexes, columns });
     }
 
     // NOTE: schemaの作成
