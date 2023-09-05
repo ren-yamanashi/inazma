@@ -103,5 +103,8 @@
       "extensions": ["queries"],
       "format": "svg"
     }
-  ]
+  ],
+  "[dotenv]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  }
 }
