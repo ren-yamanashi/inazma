@@ -1,9 +1,14 @@
 import { IndexSchema } from './types/schema.type';
 
+export interface ParseIndexes {
+  (args: { [key: string]: unknown }[]): IndexSchema[];
+}
+
 export const parseIndexes = (args: { [key: string]: unknown }[]): IndexSchema[] => {
   const KEY_NAME_PROPERTY = 'Key_name';
   const COLUMN_NAME_PROPERTY = 'Column_name';
   const NON_UNIQUE_PROPERTY = 'Non_unique';
+  const KEY_NAME_PRIMARY = 'PRIMARY';
   const indexes: { [key: string]: IndexSchema } = {};
 
   for (const arg of args) {
@@ -21,6 +26,8 @@ export const parseIndexes = (args: { [key: string]: unknown }[]): IndexSchema[] 
     const keyName = arg[KEY_NAME_PROPERTY];
     const columnName = arg[COLUMN_NAME_PROPERTY];
     const nonUnique = arg[NON_UNIQUE_PROPERTY];
+
+    if (keyName === KEY_NAME_PRIMARY || keyName === columnName) continue;
 
     if (!indexes[keyName]) {
       indexes[keyName] = {

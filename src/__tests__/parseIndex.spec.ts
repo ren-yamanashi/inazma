@@ -61,11 +61,6 @@ describe('parseIndex', () => {
     // GIVEN: output(IndexSchema)
     const expectedValue: IndexSchema[] = [
       {
-        keyName: 'PRIMARY',
-        unique: true,
-        columnNames: ['id'],
-      },
-      {
         keyName: 'id_contents_idx',
         unique: false,
         columnNames: ['id', 'content'],

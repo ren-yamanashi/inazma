@@ -1,5 +1,5 @@
-import { COLUMN_DECORATOR, ColumnDecorator } from './decorator/column.decorator';
 import { COLUMN_EXTRA, COLUMN_KEY, ColumnExtra } from './types/column.type';
+import { COLUMN_DECORATOR, ColumnDecorator, TABLE_DECORATOR } from './types/decorator.type';
 import { ColumnSchema, TableSchema } from './types/schema.type';
 
 type GenerateStringFromSchemaOptions = {
@@ -58,8 +58,18 @@ export const generateStringFromSchema = (
     });
 
     const tableName = options.toUpperCamelCase(table.name);
-    const text = `${enums.join('\n')}\n\nclass ${tableName} {\n${columns.join('\n')}\n};\n`;
-    schemaStringList.push(text);
+    const entityDecorators = `${TABLE_DECORATOR.ENTITY}("${table.name}", {database: "${table.database}"})`;
+    const indexDecorators = table.indexes.map(
+      ({ keyName, columnNames, unique }) =>
+        `${TABLE_DECORATOR.INDEX}("${keyName}", ["${columnNames.join(
+          '", "',
+        )}"], {\nunique: ${unique}\n})`,
+    );
+    const schemaString = `${enums.join(
+      '\n',
+    )}\n\n${indexDecorators}\n${entityDecorators}\nclass ${tableName} {\n${columns.join('\n')}};\n`;
+
+    schemaStringList.push(schemaString);
   }
 
   return schemaStringList.join('\n');
@@ -92,14 +102,17 @@ export const generateStringEnumAndColumnsFromSchema: GenerateStringEnumAndColumn
         `${enumName}.${column.defaultValue}`,
         { convertColumnExtraToColumnDecorator: options.convertColumnExtraToColumnDecorator },
       );
+
       enums.push(`enum ${enumName} {\n${enumFiled.join(',\n')}\n};`);
       columns.push(`${columnDecorator}\n${columnField}: ${enumName};\n`);
+
       continue;
     }
 
     const columnDecorator = options.generateStringColumnDecorator(column, column.defaultValue, {
       convertColumnExtraToColumnDecorator: options.convertColumnExtraToColumnDecorator,
     });
+
     columns.push(
       `${columnDecorator}\n${columnField}: ${columnType}${column.nullable ? ' | null' : ''};\n`,
     );
@@ -122,13 +135,12 @@ export const generateStringColumnDecorator: GenerateStringColumnDecorator = (
   defaultValue: string | null,
   options: GenerateStringColumnDecoratorOptions,
 ): string => {
-  const _defaultValue = defaultValue === 'CURRENT_TIMESTAMP' ? 'NOW()' : defaultValue;
   const isUnique = [COLUMN_KEY.UNI, COLUMN_KEY.PRI].some((item) => item === column.key);
   const isPrimary = column.key === COLUMN_KEY.PRI;
   const decorator = options.convertColumnExtraToColumnDecorator(column.extra);
   const columnDecorator = `${decorator}({
 type: "${column.typeInDb}",
-default: ${_defaultValue},
+default: ${defaultValue},
 unsigned: ${column.unsigned},
 unique: ${isUnique},
 primary: ${isPrimary}

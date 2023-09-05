@@ -54,7 +54,7 @@ export const columnIncludeEnumSchemasDummy: ColumnSchema[] = [
   },
   {
     field: 'createdDate',
-    typeInDb: 'datatime',
+    typeInDb: 'datetime',
     typeInTs: 'Date',
     nullable: false,
     key: '',
@@ -97,7 +97,7 @@ export const columnNotIncludeEnumSchemasDummy: ColumnSchema[] = [
   },
   {
     field: 'createdDate',
-    typeInDb: 'datatime',
+    typeInDb: 'datetime',
     typeInTs: 'Date',
     nullable: false,
     key: '',

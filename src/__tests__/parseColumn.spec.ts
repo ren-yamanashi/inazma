@@ -1,4 +1,4 @@
-import { convertToPrimitiveTypeString, parseColumn } from '../parseColumn';
+import { parseColumn, parseToPrimitiveTypeString } from '../parseColumn';
 import { COLUMN_KEY } from '../types/column.type';
 import { ColumnSchema } from '../types/schema.type';
 
@@ -27,7 +27,7 @@ describe('parseColumn', () => {
     };
 
     // WHEN
-    const result = parseColumn(rowDataPacket, { convertTypeFn: convertToPrimitiveTypeString });
+    const result = parseColumn(rowDataPacket, { convertTypeFn: parseToPrimitiveTypeString });
 
     // THEN
     expect(result).toEqual(expectedValue);
@@ -57,7 +57,7 @@ describe('parseColumn', () => {
     };
 
     // WHEN
-    const result = parseColumn(rowDataPacket, { convertTypeFn: convertToPrimitiveTypeString });
+    const result = parseColumn(rowDataPacket, { convertTypeFn: parseToPrimitiveTypeString });
 
     // THEN
     expect(result).toEqual(expectedValue);

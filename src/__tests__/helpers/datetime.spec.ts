@@ -13,7 +13,13 @@ describe('getNowDate', () => {
   });
 
   it('`YYYY-MM-DDThh:mm:ss`の形式で日付が返される', () => {
+    // GIVEN: output(YYYY-MM-DDThh:mm:ss)
+    const nowDate = '2023-09-02T12:34:56';
+
+    // WHEN
     const result = getNowDate();
-    expect(result).toBe('2023-09-02T12:34:56');
+
+    // THEN
+    expect(result).toBe(nowDate);
   });
 });

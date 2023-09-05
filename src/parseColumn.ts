@@ -18,10 +18,14 @@ type ParseOptions = {
   convertTypeFn: (type: string) => PrimitiveTypeString | string;
 };
 
+export interface ParseColumn {
+  (arg: { [key: string]: unknown }, options: ParseOptions): ColumnSchema;
+}
+
 /**
- * MySQLクエリから取得したテーブル列のスキーマ情報を解析して、厳密に型指定されたTableSchemaオブジェクトを生成
+ * クエリから取得したテーブル列のスキーマ情報を解析して、厳密に型指定されたColumnSchemaオブジェクトを生成
  * @param {object} arg - MySQLクエリから取得したテーブル列のスキーマ
- * @returns {TableSchema} - 厳密に型指定されたTableSchemaオブジェクト
+ * @returns {ColumnSchema} - 厳密に型指定されたTableSchemaオブジェクト
  */
 export const parseColumn = (
   arg: { [key: string]: unknown },
@@ -41,7 +45,8 @@ export const parseColumn = (
     column.unsigned = /unsigned/.test(arg['Type']);
   }
   if ('Default' in arg) {
-    column.defaultValue = typeof arg['Default'] === 'string' ? arg['Default'] : null;
+    const defaultValue = typeof arg['Default'] === 'string' ? arg['Default'] : null;
+    column.defaultValue = defaultValue === 'CURRENT_TIMESTAMP' ? 'NOW()' : defaultValue;
   }
   return column;
 };
@@ -51,7 +56,7 @@ export const parseColumn = (
  * @param {string} arg - MySQLクエリから取得したカラムの型
  * @return {PrimitiveTypeString | string} - TypescriptのprimitiveType(enumの場合は変換されない)
  */
-export const convertToPrimitiveTypeString = (arg: string): PrimitiveTypeString | string => {
+export const parseToPrimitiveTypeString = (arg: string): PrimitiveTypeString | string => {
   const res = matchFn<string>(arg.toUpperCase())
     .with('INT', () => PRIMITIVE_TYPE.NUMBER)
     .with('TINYINT', () => PRIMITIVE_TYPE.NUMBER)
