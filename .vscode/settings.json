@@ -74,6 +74,12 @@
       "extensions": ["di.ts"],
       "format": "svg",
       "filename": true
+    },
+    {
+      "icon": "mysql",
+      "extensions": ["query.ts"],
+      "format": "svg",
+      "filename": false
     }
   ],
   "vsicons.associations.folders": [
@@ -90,6 +96,11 @@
     {
       "icon": "tools",
       "extensions": ["infrastructures"],
+      "format": "svg"
+    },
+    {
+      "icon": "mysql",
+      "extensions": ["queries"],
       "format": "svg"
     }
   ]

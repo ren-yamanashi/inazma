@@ -56,7 +56,7 @@ export const parseColumn = (
  * @param {string} arg - MySQLクエリから取得したカラムの型
  * @return {PrimitiveTypeString | string} - TypescriptのprimitiveType(enumの場合は変換されない)
  */
-export const convertToPrimitiveTypeString = (arg: string): PrimitiveTypeString | string => {
+export const parseToPrimitiveTypeString = (arg: string): PrimitiveTypeString | string => {
   const res = matchFn<string>(arg.toUpperCase())
     .with('INT', () => PRIMITIVE_TYPE.NUMBER)
     .with('TINYINT', () => PRIMITIVE_TYPE.NUMBER)

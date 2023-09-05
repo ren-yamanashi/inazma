@@ -1,7 +1,7 @@
 import { columnIncludeEnumSchemasDummy } from '../../__mocks__/columnSchema.dummy';
 import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
 import { isArrayOfObjects } from '../../helpers/typeCheck';
-import { convertToPrimitiveTypeString, parseColumn } from '../../parseColumn';
+import { parseColumn, parseToPrimitiveTypeString } from '../../parseColumn';
 import { showColumnsQuery } from '../../queries/showColumns.query';
 
 describe('showColumnsQuery', () => {
@@ -9,7 +9,7 @@ describe('showColumnsQuery', () => {
   const tableName = 'sample';
   const options = {
     parseColumn: parseColumn,
-    convertTypeFn: convertToPrimitiveTypeString,
+    convertTypeFn: parseToPrimitiveTypeString,
     isArrayOfObjects: isArrayOfObjects,
   };
 

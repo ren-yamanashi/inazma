@@ -58,7 +58,7 @@ export const generateStringFromSchema = (
     });
 
     const tableName = options.toUpperCamelCase(table.name);
-    const entityDecorators = `${TABLE_DECORATOR.ENTITY}("${table.name}")`;
+    const entityDecorators = `${TABLE_DECORATOR.ENTITY}("${table.name}", {database: "${table.database}"})`;
     const indexDecorators = table.indexes.map(
       ({ keyName, columnNames, unique }) =>
         `${TABLE_DECORATOR.INDEX}("${keyName}", ["${columnNames.join(

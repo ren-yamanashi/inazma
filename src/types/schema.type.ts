@@ -19,6 +19,7 @@ export type IndexSchema = {
 };
 
 export type TableSchema = {
+  database: string;
   name: string;
   columns: ColumnSchema[];
   indexes: IndexSchema[];

@@ -46,7 +46,7 @@ deleted
 @Index(\"id_contents_idx\", [\"id\", \"content\"], {
 unique: false
 })
-@Entity(\"sample\")
+@Entity(\"sample\", {database: \"sample\"})
 class Sample {
 @AutoIncrementColumn({
 type: "bigint",

@@ -11,7 +11,7 @@ import {
   generateStringEnumAndColumnsFromSchema,
   generateStringFromSchema,
 } from '../generateStringFromSchema';
-import { toUpperCamelCase } from '../helpers/convertString';
+import { toUpperCamelCase } from '../helpers/convert';
 import { COLUMN_EXTRA, ColumnExtra } from '../types/column.type';
 import { COLUMN_DECORATOR, ColumnDecorator } from '../types/decorator.type';
 import { ColumnSchema, TableSchema } from '../types/schema.type';
@@ -192,7 +192,7 @@ deleted
 @Index("id_contents_idx", ["id", "content"], {
 unique: false
 })
-@Entity("sample")
+@Entity("sample", {database: "sample"})
 class Sample {
 @AutoIncrementColumn({
 type: "bigint",
