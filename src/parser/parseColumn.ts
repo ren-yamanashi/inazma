@@ -1,7 +1,7 @@
-import { matchFn } from './helpers/match';
-import { ColumnExtra, ColumnKey } from './types/column.type';
-import { PRIMITIVE_TYPE, PrimitiveTypeString } from './types/primitive.type';
-import { ColumnSchema } from './types/schema.type';
+import { matchFn } from '../helpers/match';
+import { ColumnExtra, ColumnKey } from '../types/column.type';
+import { PRIMITIVE_TYPE, PrimitiveTypeString } from '../types/primitive.type';
+import { ColumnSchema } from '../types/schema.type';
 
 const defaultColumn: ColumnSchema = {
   field: '',

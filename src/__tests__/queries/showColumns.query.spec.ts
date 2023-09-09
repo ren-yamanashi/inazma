@@ -1,7 +1,7 @@
 import { columnIncludeEnumSchemasDummy } from '../../__mocks__/columnSchema.dummy';
 import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
 import { isArrayOfObjects } from '../../helpers/typeCheck';
-import { parseColumn, parseToPrimitiveTypeString } from '../../parseColumn';
+import { parseColumn, parseToPrimitiveTypeString } from '../../parser/parseColumn';
 import { showColumnsQuery } from '../../queries/showColumns.query';
 
 describe('showColumnsQuery', () => {

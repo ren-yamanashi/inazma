@@ -1,5 +1,5 @@
 import { MysqlClientInterface } from '../interfaces/mysql.interface';
-import { ParseColumn } from '../parseColumn';
+import { ParseColumn } from '../parser/parseColumn';
 import { PrimitiveTypeString } from '../types/primitive.type';
 import { ColumnSchema } from '../types/schema.type';
 

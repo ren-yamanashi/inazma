@@ -1,7 +1,7 @@
 import { indexSchemasDummy } from '../../__mocks__/indexSchema.dummy';
 import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
 import { isArrayOfObjects } from '../../helpers/typeCheck';
-import { parseIndexes } from '../../parseIndex';
+import { parseIndexes } from '../../parser/parseIndex';
 import { showIndexQuery } from '../../queries/showIndex.query';
 
 describe('showIndexQuery', () => {

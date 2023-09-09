@@ -1,3 +1,4 @@
+import { migrationEntity } from './commands/migrationEntity.command';
 import { schemaGen } from './commands/schemaGen.command';
 import {
   autoIncrementColumnDecorator,
@@ -20,6 +21,8 @@ import { getNowDate } from './helpers/datetime';
     password: process.env.MYSQL_PASSWORD,
     database: 'sample',
   });
+
+  migrationEntity();
 })();
 
 export const NOW = getNowDate;

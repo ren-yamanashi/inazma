@@ -1,4 +1,4 @@
-import { IndexSchema } from './types/schema.type';
+import { IndexSchema } from '../types/schema.type';
 
 export interface ParseIndexes {
   (args: { [key: string]: unknown }[]): IndexSchema[];
@@ -43,4 +43,21 @@ export const parseIndexes = (args: { [key: string]: unknown }[]): IndexSchema[] 
   }
 
   return Object.values(indexes);
+};
+
+export const parseIndexDecoratorFromString = (stringSchema: string): IndexSchema[] => {
+  const INDEX_REGEXP = /@Index\("(\w+)", \[([\w\s",]+)\], \{[\s]*unique: (true|false)[\s]*\}\)/g;
+  const matches = [...stringSchema.matchAll(INDEX_REGEXP)];
+
+  return matches.map((match) => {
+    const keyName = match[1];
+    const columnNames = match[2].split(',').map((v) => v.trim().replace(/"/g, ''));
+    const unique = match[3] === 'true';
+
+    return {
+      keyName,
+      columnNames,
+      unique,
+    };
+  });
 };

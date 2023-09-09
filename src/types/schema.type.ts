@@ -1,6 +1,11 @@
 import { ColumnExtra, ColumnKey } from './column.type';
 import { PrimitiveTypeString } from './primitive.type';
 
+export type EnumSchema = {
+  name: string;
+  value: string;
+};
+
 export type ColumnSchema = {
   field: string;
   typeInTs: PrimitiveTypeString | string;

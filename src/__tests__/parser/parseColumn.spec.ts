@@ -1,6 +1,6 @@
-import { parseColumn, parseToPrimitiveTypeString } from '../parseColumn';
-import { COLUMN_KEY } from '../types/column.type';
-import { ColumnSchema } from '../types/schema.type';
+import { parseColumn, parseToPrimitiveTypeString } from '../../parser/parseColumn';
+import { COLUMN_KEY } from '../../types/column.type';
+import { ColumnSchema } from '../../types/schema.type';
 
 describe('parseColumn', () => {
   it('正常にparsesされる', () => {
