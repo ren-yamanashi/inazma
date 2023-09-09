@@ -127,11 +127,56 @@ describe('generateStringEnumAndColumnsFromSchema', () => {
 
     // GIVEN: output(columns)
     const columns = [
-      `@AutoIncrementColumn({\ntype: \"bigint\",\ndefault: null,\nunsigned: true,\nunique: true,\nprimary: true\n})\nid: number;\n`,
-      `@Column({\ntype: \"varchar(255)\",\ndefault: null,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncontent: string | null;\n`,
-      `@Column({\ntype: \"int\",\ndefault: 0,\nunsigned: true,\nunique: false,\nprimary: false\n})\norder: number;\n`,
-      `@Column({\ntype: \"enum('active','inactive','deleted')\",\ndefault: Status.active,\nunsigned: false,\nunique: false,\nprimary: false\n})\nstatus: Status;\n`,
-      `@DefaultGeneratedColumn({\ntype: \"datetime\",\ndefault: NOW(),\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
+      `{
+field: 'id',
+typeInTs: 'number',
+typeInDb: 'bigint',
+unsigned: true,
+nullable: false,
+key: 'PRI',
+defaultValue: null,
+extra: 'auto_increment'
+}`,
+      `{
+field: 'content',
+typeInTs: 'string',
+typeInDb: 'varchar(255)',
+unsigned: false,
+nullable: true,
+key: '',
+defaultValue: null,
+extra: ''
+}`,
+      `{
+field: 'order',
+typeInTs: 'number',
+typeInDb: 'int',
+unsigned: true,
+nullable: false,
+key: '',
+defaultValue: '0',
+extra: ''
+}`,
+      `{
+field: 'status',
+typeInTs: "enum('active','inactive','deleted')",
+typeInDb: "enum('active','inactive','deleted')",
+unsigned: false,
+nullable: false,
+key: '',
+defaultValue: 'Status.active',
+extra: ''
+}`,
+      `{
+field: 'createdDate',
+typeInTs: 'Date',
+typeInDb: 'datetime',
+unsigned: false,
+nullable: false,
+key: '',
+defaultValue: 'NOW()',
+extra: 'DEFAULT_GENERATED'
+}`,
     ];
     // GIVEN: output(enums)
     const enums = [
@@ -159,10 +204,46 @@ deleted
 
     // GIVEN: output(columns)
     const columns = [
-      `@AutoIncrementColumn({\ntype: \"bigint\",\ndefault: null,\nunsigned: true,\nunique: true,\nprimary: true\n})\nid: number;\n`,
-      `@Column({\ntype: \"varchar(255)\",\ndefault: null,\nunsigned: false,\nunique: false,\nprimary: false\n})\ncontent: string | null;\n`,
-      `@Column({\ntype: \"int\",\ndefault: 0,\nunsigned: true,\nunique: false,\nprimary: false\n})\norder: number;\n`,
-      `@DefaultGeneratedColumn({\ntype: \"datetime\",\ndefault: NOW(),\nunsigned: false,\nunique: false,\nprimary: false\n})\ncreatedDate: Date;\n`,
+      `{
+field: 'id',
+typeInTs: 'number',
+typeInDb: 'bigint',
+unsigned: true,
+nullable: false,
+key: 'PRI',
+defaultValue: null,
+extra: 'auto_increment'
+}`,
+      `{
+field: 'content',
+typeInTs: 'string',
+typeInDb: 'varchar(255)',
+unsigned: false,
+nullable: true,
+key: '',
+defaultValue: null,
+extra: ''
+}`,
+      `{
+field: 'order',
+typeInTs: 'number',
+typeInDb: 'int',
+unsigned: true,
+nullable: false,
+key: '',
+defaultValue: '0',
+extra: ''
+}`,
+      `{
+field: 'createdDate',
+typeInTs: 'Date',
+typeInDb: 'datetime',
+unsigned: false,
+nullable: false,
+key: '',
+defaultValue: 'NOW()',
+extra: 'DEFAULT_GENERATED'
+}`,
     ];
 
     // WHEN
@@ -189,57 +270,65 @@ inactive,
 deleted
 };
 
-@Index("id_contents_idx", ["id", "content"], {
-unique: false
-})
-@Entity("sample", {database: "sample"})
-class Sample {
-@AutoIncrementColumn({
-type: "bigint",
-default: null,
+const Sample: TableSchema = {
+database: sample,
+name: sample,
+columns: [{
+field: 'id',
+typeInTs: 'number',
+typeInDb: 'bigint',
 unsigned: true,
-unique: true,
-primary: true
-})
-id: number;
-
-@Column({
-type: "varchar(255)",
-default: null,
+nullable: false,
+key: 'PRI',
+defaultValue: null,
+extra: 'auto_increment'
+},
+{
+field: 'content',
+typeInTs: 'string',
+typeInDb: 'varchar(255)',
 unsigned: false,
-unique: false,
-primary: false
-})
-content: string | null;
-
-@Column({
-type: "int",
-default: 0,
+nullable: true,
+key: '',
+defaultValue: null,
+extra: ''
+},
+{
+field: 'order',
+typeInTs: 'number',
+typeInDb: 'int',
 unsigned: true,
-unique: false,
-primary: false
-})
-order: number;
-
-@Column({
-type: "enum('active','inactive','deleted')",
-default: Status.active,
+nullable: false,
+key: '',
+defaultValue: '0',
+extra: ''
+},
+{
+field: 'status',
+typeInTs: \"enum('active','inactive','deleted')\",
+typeInDb: \"enum('active','inactive','deleted')\",
 unsigned: false,
-unique: false,
-primary: false
-})
-status: Status;
-
-@DefaultGeneratedColumn({
-type: "datetime",
-default: NOW(),
+nullable: false,
+key: '',
+defaultValue: 'Status.active',
+extra: ''
+},
+{
+field: 'createdDate',
+typeInTs: 'Date',
+typeInDb: 'datetime',
 unsigned: false,
+nullable: false,
+key: '',
+defaultValue: 'NOW()',
+extra: 'DEFAULT_GENERATED'
+}] as ColumnSchema[],
+indexes: [{
+keyName: 'id_contents_idx',
 unique: false,
-primary: false
-})
-createdDate: Date;
-};
-`;
+columnNames: [\"id\", \"content\"]
+}] as IndexSchema[]
+}`;
 
     // WHEN
     const result = generateStringFromSchema([tableSchema], {

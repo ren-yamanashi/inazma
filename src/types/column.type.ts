@@ -18,41 +18,44 @@ export const COLUMN_EXTRA = {
 
 export type ColumnExtra = (typeof COLUMN_EXTRA)[keyof typeof COLUMN_EXTRA];
 
+export const COLUMN_TYPE = {
+  // number type
+  INT: 'int',
+  TINYINT: 'tinyint',
+  INTEGER: 'integer',
+  SMALLINT: 'smallint',
+  MEDIUMINT: 'mediumint',
+  BIGINT: 'bigint',
+  FLOAT: 'float',
+  DOUBLE: 'double',
+  YEAR: 'year',
+  BIT: 'bit',
+  // boolean type
+  BOOLEAN: 'boolean',
+  // date type
+  DATETIME: 'datetime',
+  DATE: 'date',
+  TIMESTAMP: 'timestamp',
+  // string type
+  CHAR: 'char',
+  VARCHAR: 'varchar',
+  DECIMAL: 'decimal',
+  NUMERIC: 'numeric',
+  TINYTEXT: 'tinytext',
+  TEXT: 'text',
+  MEDIUMTEXT: 'mediumtext',
+  LONGTEXT: 'longtext',
+  TIME: 'time',
+  // union type
+  SET: 'set',
+} as const;
+
 /**
  * Quote source
  * - https://github.dev/typeorm/typeorm/blob/master/src/decorator/columns/Column.ts
  * - https://dev.mysql.com/doc/refman/8.0/ja/literals.html
  */
 export type ColumnType =
-  // number type
-  | 'int'
-  | 'tinyint'
-  | 'integer'
-  | 'smallint'
-  | 'mediumint'
-  | 'bigint'
-  | 'float'
-  | 'double'
-  | 'year'
-  | 'bit'
-  // boolean type
-  | 'boolean'
-  // date type
-  | 'datetime'
-  | 'date'
-  | 'timestamp'
-  // string type
-  | 'char'
-  | 'varchar'
+  | (typeof COLUMN_TYPE)[keyof typeof COLUMN_TYPE]
   | `varchar(${string})`
-  | 'decimal'
-  | 'numeric'
-  | 'tinytext'
-  | 'text'
-  | 'mediumtext'
-  | 'longtext'
-  | 'time'
-  // union type
-  | 'set'
-  // enum type
   | `enum(${string})`;

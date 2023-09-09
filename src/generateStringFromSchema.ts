@@ -1,5 +1,5 @@
 import { COLUMN_EXTRA, COLUMN_KEY, ColumnExtra } from './types/column.type';
-import { COLUMN_DECORATOR, ColumnDecorator, TABLE_DECORATOR } from './types/decorator.type';
+import { COLUMN_DECORATOR, ColumnDecorator } from './types/decorator.type';
 import { ColumnSchema, TableSchema } from './types/schema.type';
 
 type GenerateStringFromSchemaOptions = {
@@ -58,16 +58,23 @@ export const generateStringFromSchema = (
     });
 
     const tableName = options.toUpperCamelCase(table.name);
-    const entityDecorators = `${TABLE_DECORATOR.ENTITY}("${table.name}", {database: "${table.database}"})`;
-    const indexDecorators = table.indexes.map(
+
+    const indexes = table.indexes.map(
       ({ keyName, columnNames, unique }) =>
-        `${TABLE_DECORATOR.INDEX}("${keyName}", ["${columnNames.join(
-          '", "',
-        )}"], {\nunique: ${unique}\n})`,
+        `{
+keyName: '${keyName}',
+unique: ${unique},
+columnNames: ["${columnNames.join('", "')}"]
+}`,
     );
-    const schemaString = `${enums.join(
-      '\n',
-    )}\n\n${indexDecorators}\n${entityDecorators}\nclass ${tableName} {\n${columns.join('\n')}};\n`;
+
+    const schemaString = `${enums.join('\n')}\n
+const ${tableName}: TableSchema = {
+database: ${table.database},
+name: ${table.name},
+columns: [${columns.join(',\n')}] as ColumnSchema[],
+indexes: [${indexes.join(',\n')}] as IndexSchema[]
+}`;
 
     schemaStringList.push(schemaString);
   }
@@ -92,30 +99,30 @@ export const generateStringEnumAndColumnsFromSchema: GenerateStringEnumAndColumn
 
   for (const column of columnSchemas) {
     const columnField = column.field;
-    const columnType = column.typeInTs;
+    const columnTypeInTs = column.typeInTs;
+    const enumName = options.toUpperCamelCase(columnField);
 
-    if (ENUM_REGEXP.test(columnType)) {
-      const enumName = options.toUpperCamelCase(columnField);
-      const enumFiled = String(columnType.match(PAREN_REGEXP)).replace(/'/g, '').split(',');
-      const columnDecorator = options.generateStringColumnDecorator(
-        column,
-        `${enumName}.${column.defaultValue}`,
-        { convertColumnExtraToColumnDecorator: options.convertColumnExtraToColumnDecorator },
-      );
+    const isEnumType = ENUM_REGEXP.test(columnTypeInTs);
 
-      enums.push(`enum ${enumName} {\n${enumFiled.join(',\n')}\n};`);
-      columns.push(`${columnDecorator}\n${columnField}: ${enumName};\n`);
+    const defaultValue = isEnumType ? `${enumName}.${column.defaultValue}` : column.defaultValue;
+    const enumFiled = isEnumType
+      ? String(columnTypeInTs.match(PAREN_REGEXP)).replace(/'/g, '').split(',')
+      : null;
 
-      continue;
-    }
+    // NOTE: enumを作成
+    enumFiled && enums.push(`enum ${enumName} {\n${enumFiled.join(',\n')}\n};`);
 
-    const columnDecorator = options.generateStringColumnDecorator(column, column.defaultValue, {
-      convertColumnExtraToColumnDecorator: options.convertColumnExtraToColumnDecorator,
-    });
-
-    columns.push(
-      `${columnDecorator}\n${columnField}: ${columnType}${column.nullable ? ' | null' : ''};\n`,
-    );
+    // NOTE: columnを作成
+    columns.push(`{
+field: '${columnField}',
+typeInTs: ${enumFiled ? `"${columnTypeInTs}"` : `'${column.typeInTs}'`},
+typeInDb: ${enumFiled ? `"${column.typeInDb}"` : `'${column.typeInDb}'`},
+unsigned: ${column.unsigned},
+nullable: ${column.nullable},
+key: '${column.key}',
+defaultValue: ${defaultValue != null ? `'${defaultValue}'` : null},
+extra: '${column.extra}'
+}`);
   }
 
   return {

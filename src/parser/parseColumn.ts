@@ -1,5 +1,5 @@
 import { matchFn } from '../helpers/match';
-import { ColumnExtra, ColumnKey } from '../types/column.type';
+import { COLUMN_TYPE, ColumnExtra, ColumnKey, ColumnType } from '../types/column.type';
 import { PRIMITIVE_TYPE, PrimitiveTypeString } from '../types/primitive.type';
 import { ColumnSchema } from '../types/schema.type';
 
@@ -41,7 +41,7 @@ export const parseColumn = (
   }
   if ('Type' in arg && typeof arg['Type'] === 'string') {
     column.typeInTs = options.convertTypeFn(arg['Type']);
-    column.typeInDb = new String(arg['Type']).replace(/unsigned/g, '').trim();
+    column.typeInDb = parseToColumnType(new String(arg['Type']).replace(/unsigned/g, '').trim());
     column.unsigned = /unsigned/.test(arg['Type']);
   }
   if ('Default' in arg) {
@@ -90,4 +90,21 @@ export const parseToPrimitiveTypeString = (arg: string): PrimitiveTypeString | s
 
   if (!res) return PRIMITIVE_TYPE.NULL;
   return res;
+};
+
+export const parseToColumnType = (arg: string): ColumnType => {
+  const upperArg = arg.toUpperCase();
+
+  // NOTE: varcharの文字列を解析
+  const varcharMatch = arg.match(/^varchar\((.+?)\)$/);
+  if (varcharMatch) return `varchar(${varcharMatch[1]})` as ColumnType;
+
+  // NOTE: enumの文字列を解析
+  const enumMatch = arg.match(/^enum\((.+?)\)$/);
+  if (enumMatch) return `enum(${enumMatch[1]})` as ColumnType;
+
+  // NOTE: その他の型を確認
+  if (upperArg in COLUMN_TYPE) return COLUMN_TYPE[upperArg as keyof typeof COLUMN_TYPE];
+
+  throw new Error('Invalid column type');
 };

@@ -1,4 +1,8 @@
-import { parseColumn, parseToPrimitiveTypeString } from '../../parser/parseColumn';
+import {
+  parseColumn,
+  parseToColumnType,
+  parseToPrimitiveTypeString,
+} from '../../parser/parseColumn';
 import { COLUMN_KEY } from '../../types/column.type';
 import { ColumnSchema } from '../../types/schema.type';
 
@@ -61,5 +65,43 @@ describe('parseColumn', () => {
 
     // THEN
     expect(result).toEqual(expectedValue);
+  });
+});
+
+describe('parseToColumnType', () => {
+  it('正常にparseされる', () => {
+    // GIVEN: input, output(int)
+    const intString = 'int';
+
+    // WHEN
+    const result = parseToColumnType(intString);
+
+    // THEN
+    expect(result).toEqual(intString);
+  });
+
+  it('varcharやenumなど括弧の間が任意の文字になるtypeもparseされる', () => {
+    // GIVEN: input, output(varchar)
+    const varcharString = 'varchar(255)';
+
+    // GIVEN: input, output(enum)
+    const enumString = 'enum("A","B","C")';
+
+    // WHEN
+    const resultOfParseVarcharString = parseToColumnType(varcharString);
+    const resultOfParseEnumString = parseToColumnType(enumString);
+
+    // THEN
+    expect(resultOfParseVarcharString).toEqual(varcharString);
+    expect(resultOfParseEnumString).toEqual(enumString);
+  });
+
+  it('一致するColumnTypeがない場合はエラー', () => {
+    // GIVEN: input(一致するColumnTypeがない)
+    const invalidInput = 'invalidType';
+
+    // WHEN
+    // THEN
+    expect(() => parseToColumnType(invalidInput)).toThrow('Invalid column type');
   });
 });
