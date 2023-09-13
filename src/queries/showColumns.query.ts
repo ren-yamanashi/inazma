@@ -21,6 +21,7 @@ export const showColumnsQuery = async (
       options.parseColumn(column, { convertTypeFn: options.convertTypeFn }),
     );
   } catch (error) {
+    console.error(error);
     return new Error('parseError');
   }
 };

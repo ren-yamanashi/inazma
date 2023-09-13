@@ -271,8 +271,8 @@ deleted
 };
 
 const Sample: TableSchema = {
-database: sample,
-name: sample,
+database: 'sample',
+name: 'sample',
 columns: [{
 field: 'id',
 typeInTs: 'number',

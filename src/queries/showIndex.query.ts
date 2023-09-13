@@ -16,6 +16,7 @@ export const showIndexQuery = async (
     if (!options.isArrayOfObjects(indexes)) throw new Error('parseError');
     return options.parseIndexes(indexes);
   } catch (error) {
+    console.error(error);
     return new Error('parseError');
   }
 };

@@ -99,6 +99,14 @@ export const parseToColumnType = (arg: string): ColumnType => {
   const varcharMatch = arg.match(/^varchar\((.+?)\)$/);
   if (varcharMatch) return `varchar(${varcharMatch[1]})` as ColumnType;
 
+  // NOTE: bigintの文字列を解析
+  const bigintMatch = arg.match(/^bigint\((.+?)\)$/);
+  if (bigintMatch) return `bigint(${bigintMatch[1]})` as ColumnType;
+
+  // NOTE: intの文字列を解析
+  const intMatch = arg.match(/^int\((.+?)\)$/);
+  if (intMatch) return `int(${intMatch[1]})` as ColumnType;
+
   // NOTE: enumの文字列を解析
   const enumMatch = arg.match(/^enum\((.+?)\)$/);
   if (enumMatch) return `enum(${enumMatch[1]})` as ColumnType;

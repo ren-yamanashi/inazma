@@ -8,11 +8,14 @@
     "yarn": "1.22.11"
   },
   "scripts": {
-    "dev": "npm run build && node dist/index.js",
+    "dev": "yarn build && node dist/index.js",
     "build": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js",
     "build:watch": "esbuild src/index.ts --bundle --platform=node --outfile=dist/index.js --watch=forever & nodemon dist/index.js",
     "test": "jest",
-    "lint": "eslint . --ext ts --ext js"
+    "lint": "eslint . --ext ts --ext js",
+    "docker-start": "docker-compose up -d",
+    "docker-stop": "docker-compose down",
+    "mysql-start": "docker exec -it mysql_container mysql -uroot -ppassword"
   },
   "husky": {
     "hooks": {

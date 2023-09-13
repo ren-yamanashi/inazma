@@ -70,8 +70,8 @@ columnNames: ["${columnNames.join('", "')}"]
 
     const schemaString = `${enums.join('\n')}\n
 const ${tableName}: TableSchema = {
-database: ${table.database},
-name: ${table.name},
+database: '${table.database}',
+name: '${table.name}',
 columns: [${columns.join(',\n')}] as ColumnSchema[],
 indexes: [${indexes.join(',\n')}] as IndexSchema[]
 }`;

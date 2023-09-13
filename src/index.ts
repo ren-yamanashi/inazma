@@ -1,4 +1,3 @@
-import { migrationEntity } from './commands/migrationEntity.command';
 import { schemaGen } from './commands/schemaGen.command';
 import {
   autoIncrementColumnDecorator,
@@ -17,12 +16,12 @@ import { getNowDate } from './helpers/datetime';
 
   await schemaGen({
     host: 'localhost',
-    user: process.env.MYSQL_USERNAME,
-    password: process.env.MYSQL_PASSWORD,
+    user: 'root',
+    password: 'password',
     database: 'sample',
   });
 
-  migrationEntity();
+  // migrationEntity();
 })();
 
 export const NOW = getNowDate;

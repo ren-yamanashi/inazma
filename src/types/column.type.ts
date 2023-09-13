@@ -58,4 +58,6 @@ export const COLUMN_TYPE = {
 export type ColumnType =
   | (typeof COLUMN_TYPE)[keyof typeof COLUMN_TYPE]
   | `varchar(${string})`
+  | `bigint(${number})`
+  | `int(${number})`
   | `enum(${string})`;
