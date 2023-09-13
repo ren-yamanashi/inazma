@@ -18,6 +18,7 @@
   },
   "include": [
     "sample/db.schema.ts",
+    "env/env.d.ts",
     "src/**/*",
     "src/__tests__/**/*"
   ],
