@@ -31,7 +31,9 @@ describe('parseColumn', () => {
     };
 
     // WHEN
-    const result = parseColumn(rowDataPacket, { convertTypeFn: parseToPrimitiveTypeString });
+    const result = parseColumn(rowDataPacket, {
+      parseToPrimitiveTypeString: parseToPrimitiveTypeString,
+    });
 
     // THEN
     expect(result).toEqual(expectedValue);
@@ -61,7 +63,9 @@ describe('parseColumn', () => {
     };
 
     // WHEN
-    const result = parseColumn(rowDataPacket, { convertTypeFn: parseToPrimitiveTypeString });
+    const result = parseColumn(rowDataPacket, {
+      parseToPrimitiveTypeString: parseToPrimitiveTypeString,
+    });
 
     // THEN
     expect(result).toEqual(expectedValue);

@@ -1,5 +1,6 @@
 import { indexSchemasDummy } from '../../__mocks__/indexSchema.dummy';
 import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
+import { convertToErrorClass } from '../../helpers/convert';
 import { isArrayOfObjects } from '../../helpers/typeCheck';
 import { parseIndexes } from '../../parser/parseIndex';
 import { showIndexQuery } from '../../queries/showIndex.query';
@@ -10,6 +11,7 @@ describe('showIndexQuery', () => {
   const options = {
     parseIndexes: parseIndexes,
     isArrayOfObjects: isArrayOfObjects,
+    convertToErrorClass: convertToErrorClass,
   };
 
   it('正常にIndexが取得できる', async () => {

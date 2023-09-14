@@ -1,4 +1,5 @@
 import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
+import { convertToErrorClass } from '../../helpers/convert';
 import { isArrayOfObjects } from '../../helpers/typeCheck';
 import { showTablesQuery } from '../../queries/showTables.query';
 
@@ -6,6 +7,7 @@ describe('showTables', () => {
   const mysqlClientMock = new MysqlClientMock();
   const options = {
     isArrayOfObjects: isArrayOfObjects,
+    convertToErrorClass: convertToErrorClass,
   };
 
   it('正常にTableが取得できる', async () => {

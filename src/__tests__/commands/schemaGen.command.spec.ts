@@ -27,7 +27,7 @@ describe('schemaGen', () => {
     process.env.APP_ENV = APP_ENV;
   });
 
-  it('should generate schema successfully', async () => {
+  it('正常にschemaが生成される', async () => {
     // GIVEN: input(MysqlConnectionConfig)
     const mysqlClientConfig: MysqlConnectionConfig = {
       host: 'sample',

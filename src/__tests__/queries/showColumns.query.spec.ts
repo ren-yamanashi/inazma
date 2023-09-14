@@ -1,5 +1,6 @@
 import { columnIncludeEnumSchemasDummy } from '../../__mocks__/columnSchema.dummy';
 import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
+import { convertToErrorClass } from '../../helpers/convert';
 import { isArrayOfObjects } from '../../helpers/typeCheck';
 import { parseColumn, parseToPrimitiveTypeString } from '../../parser/parseColumn';
 import { showColumnsQuery } from '../../queries/showColumns.query';
@@ -9,8 +10,9 @@ describe('showColumnsQuery', () => {
   const tableName = 'sample';
   const options = {
     parseColumn: parseColumn,
-    convertTypeFn: parseToPrimitiveTypeString,
+    parseToPrimitiveTypeString: parseToPrimitiveTypeString,
     isArrayOfObjects: isArrayOfObjects,
+    convertToErrorClass: convertToErrorClass,
   };
 
   it('正常にColumnが取得できる', async () => {

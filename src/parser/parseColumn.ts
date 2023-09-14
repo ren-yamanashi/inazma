@@ -14,8 +14,8 @@ const defaultColumn: ColumnSchema = {
   extra: '',
 };
 
-type ParseOptions = {
-  convertTypeFn: (type: string) => PrimitiveTypeString | string;
+export type ParseOptions = {
+  parseToPrimitiveTypeString: (type: string) => PrimitiveTypeString | string;
 };
 
 export interface ParseColumn {
@@ -40,7 +40,7 @@ export const parseColumn = (
     column.extra = arg['Extra'] as ColumnExtra;
   }
   if ('Type' in arg && typeof arg['Type'] === 'string') {
-    column.typeInTs = options.convertTypeFn(arg['Type']);
+    column.typeInTs = options.parseToPrimitiveTypeString(arg['Type']);
     column.typeInDb = parseToColumnType(new String(arg['Type']).replace(/unsigned/g, '').trim());
     column.unsigned = /unsigned/.test(arg['Type']);
   }

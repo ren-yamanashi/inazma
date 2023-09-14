@@ -5,8 +5,9 @@ import { ColumnSchema } from '../types/schema.type';
 
 type ShowQueryOptions = {
   parseColumn: ParseColumn;
-  convertTypeFn: (arg: string) => PrimitiveTypeString | string;
+  parseToPrimitiveTypeString: (arg: string) => PrimitiveTypeString | string;
   isArrayOfObjects: (arg: unknown) => arg is { [key: string]: unknown }[];
+  convertToErrorClass: (error: unknown) => Error;
 };
 
 export const showColumnsQuery = async (
@@ -17,11 +18,9 @@ export const showColumnsQuery = async (
   try {
     const columns = await mysqlClient.queryAsync('SHOW COLUMNS FROM ??', [tableName]);
     if (!options.isArrayOfObjects(columns)) throw new Error('parseError');
-    return columns.map((column) =>
-      options.parseColumn(column, { convertTypeFn: options.convertTypeFn }),
-    );
+    return columns.map((column) => options.parseColumn(column, options));
   } catch (error) {
     console.error(error);
-    return new Error('parseError');
+    return options.convertToErrorClass(error);
   }
 };

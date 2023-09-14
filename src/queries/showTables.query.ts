@@ -2,6 +2,7 @@ import { MysqlClientInterface } from '../interfaces/mysql.interface';
 
 type ShowTablesOptions = {
   isArrayOfObjects: (arg: unknown) => arg is { [key: string]: unknown }[];
+  convertToErrorClass: (error: unknown) => Error;
 };
 
 export const showTablesQuery = async (
@@ -22,6 +23,6 @@ export const showTablesQuery = async (
     });
   } catch (error) {
     console.error(error);
-    return new Error('parseError');
+    return options.convertToErrorClass(error);
   }
 };

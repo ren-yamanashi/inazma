@@ -4,6 +4,7 @@ import { IndexSchema } from '../types/schema.type';
 type ShowQueryOptions = {
   parseIndexes: (args: { [key: string]: unknown }[]) => IndexSchema[];
   isArrayOfObjects: (arg: unknown) => arg is { [key: string]: unknown }[];
+  convertToErrorClass: (error: unknown) => Error;
 };
 
 export const showIndexQuery = async (
@@ -17,6 +18,6 @@ export const showIndexQuery = async (
     return options.parseIndexes(indexes);
   } catch (error) {
     console.error(error);
-    return new Error('parseError');
+    return options.convertToErrorClass(error);
   }
 };

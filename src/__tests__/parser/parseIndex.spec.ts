@@ -1,6 +1,4 @@
-import { stringIndexDecoratorDummy } from '../../__mocks__/stringIndexDecorator.dummy';
-import { stringSchemaDummy } from '../../__mocks__/stringSchema.dummy';
-import { parseIndexDecoratorFromString, parseIndexes } from '../../parser/parseIndex';
+import { parseIndexes } from '../../parser/parseIndex';
 import { IndexSchema } from '../../types/schema.type';
 
 describe('parseIndex', () => {
@@ -74,52 +72,5 @@ describe('parseIndex', () => {
 
     // THEN
     expect(result).toEqual(expectedValue);
-  });
-});
-
-describe('parseIndexDecoratorFromString', () => {
-  it('正常に解析される(inputが@Indexデコレーターのみ)', () => {
-    // GIVEN: input(string)
-    const stringIndexDecorator = stringIndexDecoratorDummy;
-
-    // GIVEN: output(IndexSchema[])
-    const indexSchemas: IndexSchema[] = [
-      {
-        keyName: 'id_contents_idx',
-        columnNames: ['id', 'content'],
-        unique: false,
-      },
-      {
-        keyName: 'unique_name_idx',
-        columnNames: ['name'],
-        unique: true,
-      },
-    ];
-
-    // WHEN
-    const result = parseIndexDecoratorFromString(stringIndexDecorator);
-
-    // THEN
-    expect(result).toEqual(indexSchemas);
-  });
-
-  it('正常に解析される(inputに@Indexデコレーター以外も含む)', () => {
-    // GIVEN: input(string)
-    const stringSchema = stringSchemaDummy;
-
-    // GIVEN: output(IndexSchema[])
-    const indexSchemas: IndexSchema[] = [
-      {
-        keyName: 'id_contents_idx',
-        columnNames: ['id', 'content'],
-        unique: false,
-      },
-    ];
-
-    // WHEN
-    const result = parseIndexDecoratorFromString(stringSchema);
-
-    // THEN
-    expect(result).toEqual(indexSchemas);
   });
 });
