@@ -1,8 +1,13 @@
 import { MysqlClientInterface } from '../interfaces/mysql.interface';
 
+type DropTablesQueryOptions = {
+  convertToErrorClass: (error: unknown) => Error;
+};
+
 export const dropTablesQuery = async (
   tableNameList: string[],
   mysqlClient: MysqlClientInterface,
+  options: DropTablesQueryOptions,
 ): Promise<void | Error> => {
   try {
     await Promise.all(
@@ -10,6 +15,6 @@ export const dropTablesQuery = async (
     );
   } catch (error) {
     console.error(error);
-    return new Error('queryError');
+    return options.convertToErrorClass(error);
   }
 };

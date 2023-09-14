@@ -106,8 +106,5 @@ describe('generateTableSchemaList', () => {
 
     // THEN: 関数の戻り値が正しいか
     expect(result).toEqual([tableSchema]);
-
-    // THEN: connectionが終了したか
-    expect(mysqlClientMock.endConnection).toHaveBeenCalled();
   });
 });

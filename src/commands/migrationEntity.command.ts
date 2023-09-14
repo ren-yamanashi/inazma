@@ -29,37 +29,11 @@ export const migrationEntity = async (
     });
     if (prevTableSchemaList instanceof Error) return prevTableSchemaList;
 
-    const currentTableNameList = tableSchemaList.map((table) => table.name);
     const prevTableNameList = prevTableSchemaList.map((table) => table.name);
 
-    const { tablesToCreate, tablesToUpdate } = tableSchemaList.reduce(
-      (acc: { tablesToCreate: TableSchema[]; tablesToUpdate: TableSchema[] }, currentTable) => {
-        if (prevTableNameList.includes(currentTable.name)) {
-          // NOTE: tableSchemaListにあり、prevTableSchemaListにない場合
-          acc.tablesToUpdate.push(currentTable);
-        } else {
-          // NOTE: tableSchemaListにあり、prevTableSchemaListにある場合
-          acc.tablesToCreate.push(currentTable);
-        }
-        return acc;
-      },
-      {
-        tablesToCreate: [],
-        tablesToUpdate: [],
-      },
-    );
+    upsertTables(tableSchemaList, prevTableNameList);
 
-    console.log(
-      '🚀 ~ file: migrationEntity.command.ts:35 ~ tablesToCreate:',
-      tablesToCreate,
-      tablesToUpdate,
-    );
-
-    const dropTablesError = await deleteTables(
-      prevTableNameList,
-      currentTableNameList,
-      mysqlClient,
-    );
+    const dropTablesError = await deleteTables(prevTableNameList, tableSchemaList, mysqlClient);
     if (dropTablesError) return dropTablesError;
   } catch (error) {
     console.error(error);
@@ -77,13 +51,46 @@ export const migrationEntity = async (
  */
 const deleteTables = async (
   prevTableSchemaList: string[],
-  currentTableNameList: string[],
+  currentTableSchemaList: TableSchema[],
   mysqlClient: MysqlClientInterface,
 ): Promise<void | Error> => {
+  const currentTableNameList = currentTableSchemaList.map((table) => table.name);
   const tablesNamesToDelete: string[] = prevTableSchemaList.filter(
     (prevTableName) => !currentTableNameList.includes(prevTableName),
   );
   if (!tablesNamesToDelete.length) return;
 
-  return await dropTablesQuery(tablesNamesToDelete, mysqlClient);
+  return await dropTablesQuery(tablesNamesToDelete, mysqlClient, {
+    convertToErrorClass: convertToErrorClass,
+  });
+};
+
+/**
+ * スキーマに沿ってデータベースのテーブルを更新・作成
+ * @param {TableSchema[]} currentTableSchemaList
+ * @param {string[]} prevTableNameList
+ */
+const upsertTables = (currentTableSchemaList: TableSchema[], prevTableNameList: string[]): void => {
+  const { tablesToCreate, tablesToUpdate } = currentTableSchemaList.reduce(
+    (acc: { tablesToCreate: TableSchema[]; tablesToUpdate: TableSchema[] }, currentTable) => {
+      if (prevTableNameList.includes(currentTable.name)) {
+        // NOTE: tableSchemaListにあり、prevTableSchemaListにない場合
+        acc.tablesToUpdate.push(currentTable);
+      } else {
+        // NOTE: tableSchemaListにあり、prevTableSchemaListにある場合
+        acc.tablesToCreate.push(currentTable);
+      }
+      return acc;
+    },
+    {
+      tablesToCreate: [],
+      tablesToUpdate: [],
+    },
+  );
+
+  console.log(
+    '🚀 ~ file: migrationEntity.command.ts:35 ~ tablesToCreate:',
+    tablesToCreate,
+    tablesToUpdate,
+  );
 };
