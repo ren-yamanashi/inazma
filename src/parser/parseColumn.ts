@@ -18,16 +18,16 @@ export type ParseOptions = {
   parseToPrimitiveTypeString: (type: string) => PrimitiveTypeString | string;
 };
 
-export interface ParseColumn {
+export type ParseColumn = {
   (arg: { [key: string]: unknown }, options: ParseOptions): ColumnSchema;
-}
+};
 
 /**
  * クエリから取得したテーブル列のスキーマ情報を解析して、厳密に型指定されたColumnSchemaオブジェクトを生成
  * @param {object} arg - MySQLクエリから取得したテーブル列のスキーマ
  * @returns {ColumnSchema} - 厳密に型指定されたTableSchemaオブジェクト
  */
-export const parseColumn = (
+export const parseColumn: ParseColumn = (
   arg: { [key: string]: unknown },
   options: ParseOptions,
 ): ColumnSchema => {
@@ -92,6 +92,11 @@ export const parseToPrimitiveTypeString = (arg: string): PrimitiveTypeString | s
   return res;
 };
 
+/**
+ * 文字列をMySQLのカラムの型に変換
+ * @param {string}arg
+ * @returns {ColumnType} Mysqlのカラムの型
+ */
 export const parseToColumnType = (arg: string): ColumnType => {
   const upperArg = arg.toUpperCase();
 

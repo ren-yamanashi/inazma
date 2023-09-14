@@ -5,13 +5,9 @@ type GenerateStringFromSchemaOptions = {
   generateStringEnumAndColumnsFromSchema: GenerateStringEnumAndColumnsFromSchema;
 };
 
-type GenerateStringEnumAndColumnsFromSchemaOptions = {
-  toUpperCamelCase: (arg: string) => string;
-};
-
-interface GenerateStringFromSchema {
+type GenerateStringFromSchema = {
   (tables: TableSchema[], options: GenerateStringFromSchemaOptions): string;
-}
+};
 
 /**
  * TableSchemaの配列をもとに、文字列形式のschemaを生成
@@ -55,12 +51,16 @@ indexes: [${indexes.join(',\n')}] as IndexSchema[]
   return schemaStringList.join('\n');
 };
 
-interface GenerateStringEnumAndColumnsFromSchema {
+type GenerateStringEnumAndColumnsFromSchemaOptions = {
+  toUpperCamelCase: (arg: string) => string;
+};
+
+type GenerateStringEnumAndColumnsFromSchema = {
   (columnsSchemas: ColumnSchema[], options: GenerateStringEnumAndColumnsFromSchemaOptions): {
     enums: string[];
     columns: string[];
   };
-}
+};
 
 /**
  * ColumnSchemaの配列をもとに、文字列形式の、enumとcolumnの配列を生成する
