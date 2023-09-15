@@ -2,10 +2,7 @@ import { container, mysqlClientKey } from '../di';
 import { generateTableSchemaList } from '../generators/generateTableSchemaList';
 import { convertToErrorClass } from '../helpers/convert';
 import { safeExecute } from '../helpers/safeExecute';
-import { isArrayOfObjects } from '../helpers/typeCheck';
 import { MysqlClientInterface, MysqlConnectionConfig } from '../interfaces/mysql.interface';
-import { parseColumn, parseToPrimitiveTypeString } from '../parsers/parseColumn';
-import { parseIndexes } from '../parsers/parseIndex';
 import { dropTablesQuery } from '../queries/dropTables.query';
 import { TableSchema } from '../types/schema.type';
 
@@ -20,13 +17,7 @@ export const migrationEntity = async (
     );
     if (startConnectionError) return new Error('connectionError');
 
-    const prevTableSchemaList = await generateTableSchemaList(mysqlClient, {
-      isArrayOfObjects: isArrayOfObjects,
-      parseIndexes: parseIndexes,
-      convertToErrorClass: convertToErrorClass,
-      parseToPrimitiveTypeString: parseToPrimitiveTypeString,
-      parseColumn: parseColumn,
-    });
+    const prevTableSchemaList = await generateTableSchemaList(mysqlClient);
     if (prevTableSchemaList instanceof Error) return prevTableSchemaList;
 
     const prevTableNameList = prevTableSchemaList.map((table) => table.name);
@@ -60,9 +51,7 @@ const deleteTables = async (
   );
   if (!tablesNamesToDelete.length) return;
 
-  return await dropTablesQuery(tablesNamesToDelete, mysqlClient, {
-    convertToErrorClass: convertToErrorClass,
-  });
+  return await dropTablesQuery(tablesNamesToDelete, mysqlClient);
 };
 
 /**

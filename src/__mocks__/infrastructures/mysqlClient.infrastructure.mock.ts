@@ -1,7 +1,7 @@
 import { vi } from 'vitest';
 import { MysqlClientInterface } from '../../interfaces/mysql.interface';
 import { columnDummy } from '../column.dummy';
-import { indexDummy } from '../index.dummy';
+import { tableIndexDummy } from '../tableIndex.dummy';
 
 export class MysqlClientMock implements MysqlClientInterface {
   public startConnection() {
@@ -14,7 +14,7 @@ export class MysqlClientMock implements MysqlClientInterface {
         resolve([{ Tables_in_sample: 'sample' }]);
       }
       if (query.startsWith('SHOW INDEX FROM')) {
-        resolve(indexDummy);
+        resolve(tableIndexDummy);
       }
       if (query.startsWith('SHOW COLUMNS FROM')) {
         resolve(columnDummy);

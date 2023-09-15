@@ -1,17 +1,15 @@
+import { describe, expect, it, vi } from 'vitest';
+import { MysqlClientMock } from '../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
+import { convertToErrorClass } from '../helpers/convert';
+import { isArrayOfObjects } from '../helpers/typeCheck';
 import { MysqlClientInterface } from '../interfaces/mysql.interface';
-
-type ShowTablesOptions = {
-  isArrayOfObjects: (arg: unknown) => arg is { [key: string]: unknown }[];
-  convertToErrorClass: (error: unknown) => Error;
-};
 
 export const showTablesQuery = async (
   mysqlClient: MysqlClientInterface,
-  options: ShowTablesOptions,
 ): Promise<{ databaseName: string; tableName: string }[] | Error> => {
   try {
     const tables = await mysqlClient.queryAsync('SHOW TABLES');
-    if (!options.isArrayOfObjects(tables)) throw new Error('parseError');
+    if (!isArrayOfObjects(tables)) throw new Error('parseError');
     return tables.map((table) => {
       const databaseName = Object.keys(table)[0].replace(/Tables_in_/, '');
       const tableName = Object.values(table)[0];
@@ -23,6 +21,46 @@ export const showTablesQuery = async (
     });
   } catch (error) {
     console.error(error);
-    return options.convertToErrorClass(error);
+    return convertToErrorClass(error);
   }
 };
+
+/**
+ *
+ * test
+ *
+ */
+describe('showTables', () => {
+  const mysqlClientMock = new MysqlClientMock();
+
+  it('正常にTableが取得できる', async () => {
+    // GIVEN: output({ databaseName: string; tableName: string }[])
+    const tables: { databaseName: string; tableName: string }[] = [
+      {
+        databaseName: 'sample',
+        tableName: 'sample',
+      },
+    ];
+
+    // WHEN
+    const result = await showTablesQuery(mysqlClientMock);
+
+    // THEN
+    expect(result).toEqual(tables);
+  });
+
+  it('クエリで取得したindexがオブジェクトの配列でない場合はエラー', async () => {
+    vi.spyOn(mysqlClientMock, 'queryAsync').mockReturnValue(
+      new Promise((resolve) => resolve(null)),
+    );
+
+    // GIVEN: output(Error)
+    const error = new Error('parseError');
+
+    // WHEN
+    const result = await showTablesQuery(mysqlClientMock);
+
+    // THEN
+    expect(result).toEqual(error);
+  });
+});

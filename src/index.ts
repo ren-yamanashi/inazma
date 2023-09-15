@@ -1,4 +1,4 @@
-import { Sample } from '../sample/db.schema';
+import { Sample } from '../.out/db.schema';
 import { migrationEntity } from './commands/migrationEntity.command';
 import { registerContainer } from './di';
 import { getNowDate } from './helpers/datetime';

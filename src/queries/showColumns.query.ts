@@ -1,26 +1,53 @@
+import { describe, expect, it, vi } from 'vitest';
+import { columnIncludeEnumSchemasDummy } from '../__mocks__/columnSchema.dummy';
+import { MysqlClientMock } from '../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
+import { convertToErrorClass } from '../helpers/convert';
+import { isArrayOfObjects } from '../helpers/typeCheck';
 import { MysqlClientInterface } from '../interfaces/mysql.interface';
-import { ParseColumn } from '../parsers/parseColumn';
-import { PrimitiveTypeString } from '../types/primitive.type';
+import { parseColumn } from '../parsers/parseColumn';
 import { ColumnSchema } from '../types/schema.type';
-
-type ShowQueryOptions = {
-  parseColumn: ParseColumn;
-  parseToPrimitiveTypeString: (arg: string) => PrimitiveTypeString | string;
-  isArrayOfObjects: (arg: unknown) => arg is { [key: string]: unknown }[];
-  convertToErrorClass: (error: unknown) => Error;
-};
 
 export const showColumnsQuery = async (
   tableName: string,
   mysqlClient: MysqlClientInterface,
-  options: ShowQueryOptions,
 ): Promise<ColumnSchema[] | Error> => {
   try {
     const columns = await mysqlClient.queryAsync('SHOW COLUMNS FROM ??', [tableName]);
-    if (!options.isArrayOfObjects(columns)) throw new Error('parseError');
-    return columns.map((column) => options.parseColumn(column, options));
+    if (!isArrayOfObjects(columns)) throw new Error('parseError');
+    return columns.map((column) => parseColumn(column));
   } catch (error) {
     console.error(error);
-    return options.convertToErrorClass(error);
+    return convertToErrorClass(error);
   }
 };
+
+describe('showColumnsQuery', () => {
+  const mysqlClientMock = new MysqlClientMock();
+  const tableName = 'sample';
+
+  it('正常にColumnが取得できる', async () => {
+    // GIVEN: output(ColumnSchema[])
+    const columnSchema = columnIncludeEnumSchemasDummy;
+
+    // WHEN
+    const result = await showColumnsQuery(tableName, mysqlClientMock);
+
+    // THEN
+    expect(result).toEqual(columnSchema);
+  });
+
+  it('クエリで取得したcolumnsがオブジェクトの配列でない場合はエラー', async () => {
+    vi.spyOn(mysqlClientMock, 'queryAsync').mockReturnValue(
+      new Promise((resolve) => resolve(null)),
+    );
+
+    // GIVEN: output(Error)
+    const error = new Error('parseError');
+
+    // WHEN
+    const result = await showColumnsQuery(tableName, mysqlClientMock);
+
+    // THEN
+    expect(result).toEqual(error);
+  });
+});

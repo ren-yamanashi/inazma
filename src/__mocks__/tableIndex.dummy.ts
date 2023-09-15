@@ -1,4 +1,4 @@
-export const indexDummy = [
+export const tableIndexDummy = [
   {
     Table: 'sample',
     Non_unique: 0,
