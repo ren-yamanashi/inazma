@@ -1,4 +1,5 @@
-import { parseIndexes } from '../../parser/parseIndex';
+import { describe, expect, it } from 'vitest';
+import { parseIndexes } from '../../parsers/parseIndex';
 import { IndexSchema } from '../../types/schema.type';
 
 describe('parseIndex', () => {

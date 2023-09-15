@@ -4,7 +4,7 @@ src/__tests__
 env/
 node_modules
 package.json
-jest.config.ts
+vitest.config.ts
 .eslintrc.js
 sample/
 *.js

@@ -1,12 +1,13 @@
-import { MysqlClientMock } from '../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
-import { container, mysqlClientKey, registerContainer } from '../di';
-import { generateTableSchemaList } from '../generateTableSchemaList';
-import { convertToErrorClass } from '../helpers/convert';
-import { isArrayOfObjects } from '../helpers/typeCheck';
-import { MysqlConnectionConfig } from '../interfaces/mysql.interface';
-import { parseColumn, parseToPrimitiveTypeString } from '../parser/parseColumn';
-import { parseIndexes } from '../parser/parseIndex';
-import { TableSchema } from '../types/schema.type';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
+import { container, mysqlClientKey, registerContainer } from '../../di';
+import { generateTableSchemaList } from '../../generators/generateTableSchemaList';
+import { convertToErrorClass } from '../../helpers/convert';
+import { isArrayOfObjects } from '../../helpers/typeCheck';
+import { MysqlConnectionConfig } from '../../interfaces/mysql.interface';
+import { parseColumn, parseToPrimitiveTypeString } from '../../parsers/parseColumn';
+import { parseIndexes } from '../../parsers/parseIndex';
+import { TableSchema } from '../../types/schema.type';
 
 describe('generateTableSchemaList', () => {
   const APP_ENV = process.env.APP_ENV;
@@ -20,10 +21,10 @@ describe('generateTableSchemaList', () => {
 
     container.register(mysqlClientKey, mysqlClientMock);
 
-    jest.spyOn(mysqlClientMock, 'endConnection');
+    vi.spyOn(mysqlClientMock, 'endConnection');
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     process.env.APP_ENV = APP_ENV;
   });
 

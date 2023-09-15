@@ -1,8 +1,9 @@
+import { describe, expect, it } from 'vitest';
 import {
   parseColumn,
   parseToColumnType,
   parseToPrimitiveTypeString,
-} from '../../parser/parseColumn';
+} from '../../parsers/parseColumn';
 import { COLUMN_KEY } from '../../types/column.type';
 import { ColumnSchema } from '../../types/schema.type';
 

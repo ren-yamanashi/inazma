@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { Container, InjectionKey } from '../../helpers/container';
 
 describe('Container', () => {

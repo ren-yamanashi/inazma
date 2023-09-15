@@ -1,11 +1,11 @@
 import { container, mysqlClientKey } from '../di';
-import { generateTableSchemaList } from '../generateTableSchemaList';
+import { generateTableSchemaList } from '../generators/generateTableSchemaList';
 import { convertToErrorClass } from '../helpers/convert';
 import { safeExecute } from '../helpers/safeExecute';
 import { isArrayOfObjects } from '../helpers/typeCheck';
 import { MysqlClientInterface, MysqlConnectionConfig } from '../interfaces/mysql.interface';
-import { parseColumn, parseToPrimitiveTypeString } from '../parser/parseColumn';
-import { parseIndexes } from '../parser/parseIndex';
+import { parseColumn, parseToPrimitiveTypeString } from '../parsers/parseColumn';
+import { parseIndexes } from '../parsers/parseIndex';
 import { dropTablesQuery } from '../queries/dropTables.query';
 import { TableSchema } from '../types/schema.type';
 

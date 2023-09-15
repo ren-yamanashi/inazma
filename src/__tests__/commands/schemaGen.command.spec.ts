@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { FileSystemMock } from '../../__mocks__/infrastructures/fileSystem.infrastructure.mock';
 import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
 import { schemaGen } from '../../commands/schemaGen.command';
@@ -19,11 +20,11 @@ describe('schemaGen', () => {
     container.register(fileSystemKey, fsMock);
     container.register(mysqlClientKey, mysqlClientMock);
 
-    jest.spyOn(fsMock, 'writeFileSync');
-    jest.spyOn(mysqlClientMock, 'endConnection');
+    vi.spyOn(fsMock, 'writeFileSync');
+    vi.spyOn(mysqlClientMock, 'endConnection');
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     process.env.APP_ENV = APP_ENV;
   });
 

@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest';
 import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
 import { convertToErrorClass } from '../../helpers/convert';
 import { isArrayOfObjects } from '../../helpers/typeCheck';
@@ -27,9 +28,9 @@ describe('showTables', () => {
   });
 
   it('クエリで取得したindexがオブジェクトの配列でない場合はエラー', async () => {
-    jest
-      .spyOn(mysqlClientMock, 'queryAsync')
-      .mockReturnValue(new Promise((resolve) => resolve(null)));
+    vi.spyOn(mysqlClientMock, 'queryAsync').mockReturnValue(
+      new Promise((resolve) => resolve(null)),
+    );
 
     // GIVEN: output(Error)
     const error = new Error('parseError');

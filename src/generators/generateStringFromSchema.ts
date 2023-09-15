@@ -1,4 +1,4 @@
-import { ColumnSchema, TableSchema } from './types/schema.type';
+import { ColumnSchema, TableSchema } from '../types/schema.type';
 
 type GenerateStringFromSchemaOptions = {
   toUpperCamelCase: (arg: string) => string;

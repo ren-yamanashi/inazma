@@ -2,6 +2,8 @@
   "compilerOptions": {
     "module": "ESNext",
     "target": "ES2018",
+    "moduleResolution": "Node",
+    "lib": ["ESNext", "ESNext.AsyncIterable", "DOM"],
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
@@ -12,9 +14,16 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "paths": {
+      "~/*": ["./*"],
+      "@/*": ["./*"],
       "inazma": ["src/index.ts"],
     },
-    "moduleResolution": "node"
+    "types": [
+      "@types/node",
+      "vitest/globals",
+      "vitest/importMeta",
+    ]
+    
   },
   "include": [
     "sample/db.schema.ts",

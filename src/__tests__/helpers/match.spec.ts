@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { matchFn } from '../../helpers/match';
 
 describe('match関数', () => {

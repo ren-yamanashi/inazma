@@ -1,4 +1,4 @@
-import { jest } from '@jest/globals';
+import { vi } from 'vitest';
 import { MysqlClientInterface } from '../../interfaces/mysql.interface';
 import { columnDummy } from '../column.dummy';
 import { indexDummy } from '../index.dummy';
@@ -8,7 +8,7 @@ export class MysqlClientMock implements MysqlClientInterface {
     return;
   }
 
-  public queryAsync = jest.fn((query: string) => {
+  public queryAsync = vi.fn((query: string) => {
     return new Promise((resolve) => {
       if (query === 'SHOW TABLES') {
         resolve([{ Tables_in_sample: 'sample' }]);
@@ -36,7 +36,7 @@ export class MysqlClientErrorMock implements MysqlClientInterface {
     throw new Error('DB error');
   }
 
-  public queryAsync = jest.fn((query: string) => {
+  public queryAsync = vi.fn((query: string) => {
     return new Promise((resolve, reject) => {
       if (query === 'SHOW TABLES') {
         reject(new Error('DBError'));

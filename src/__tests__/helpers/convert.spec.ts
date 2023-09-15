@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import { convertToErrorClass, toUpperCamelCase } from '../../helpers/convert';
 
 describe('toUpperCamelCase', () => {
