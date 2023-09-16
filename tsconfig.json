@@ -26,10 +26,10 @@
     
   },
   "include": [
-    ".out/db.schema.ts",
+    "sample/db.schema.ts",
     "env/env.d.ts",
     "src/**/*",
     "src/__tests__/**/*"
-, "src/__mocks__"  ],
+  ],
   "exclude": ["node_modules", "dist"]
 }

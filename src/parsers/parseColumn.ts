@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import { matchFn } from '../helpers/match';
-import { COLUMN_KEY, COLUMN_TYPE, ColumnExtra, ColumnKey, ColumnType } from '../types/column.type';
+import { COLUMN_TYPE, ColumnExtra, ColumnKey, ColumnType } from '../types/column.type';
 import { PRIMITIVE_TYPE, PrimitiveTypeString } from '../types/primitive.type';
 import { ColumnSchema } from '../types/schema.type';
 
@@ -15,12 +14,23 @@ const defaultColumn: ColumnSchema = {
   extra: '',
 };
 
+export type ParseOptions = {
+  parseToPrimitiveTypeString: (type: string) => PrimitiveTypeString | string;
+};
+
+export type ParseColumn = {
+  (arg: { [key: string]: unknown }, options: ParseOptions): ColumnSchema;
+};
+
 /**
  * クエリから取得したテーブル列のスキーマ情報を解析して、厳密に型指定されたColumnSchemaオブジェクトを生成
  * @param {object} arg - MySQLクエリから取得したテーブル列のスキーマ
  * @returns {ColumnSchema} - 厳密に型指定されたTableSchemaオブジェクト
  */
-export const parseColumn = (arg: { [key: string]: unknown }): ColumnSchema => {
+export const parseColumn: ParseColumn = (
+  arg: { [key: string]: unknown },
+  options: ParseOptions,
+): ColumnSchema => {
   // NOTE: オブジェクトの参照を毎回生成する
   const column = Object.assign({}, defaultColumn);
   if ('Field' in arg && typeof arg['Field'] === 'string') column.field = arg['Field'];
@@ -30,7 +40,7 @@ export const parseColumn = (arg: { [key: string]: unknown }): ColumnSchema => {
     column.extra = arg['Extra'] as ColumnExtra;
   }
   if ('Type' in arg && typeof arg['Type'] === 'string') {
-    column.typeInTs = parseToPrimitiveTypeString(arg['Type']);
+    column.typeInTs = options.parseToPrimitiveTypeString(arg['Type']);
     column.typeInDb = parseToColumnType(new String(arg['Type']).replace(/unsigned/g, '').trim());
     column.unsigned = /unsigned/.test(arg['Type']);
   }
@@ -46,7 +56,7 @@ export const parseColumn = (arg: { [key: string]: unknown }): ColumnSchema => {
  * @param {string} arg - MySQLクエリから取得したカラムの型
  * @return {PrimitiveTypeString | string} - TypescriptのprimitiveType(enumの場合は変換されない)
  */
-const parseToPrimitiveTypeString = (arg: string): PrimitiveTypeString | string => {
+export const parseToPrimitiveTypeString = (arg: string): PrimitiveTypeString | string => {
   const res = matchFn<string>(arg.toUpperCase())
     .with('INT', () => PRIMITIVE_TYPE.NUMBER)
     .with('TINYINT', () => PRIMITIVE_TYPE.NUMBER)
@@ -87,7 +97,7 @@ const parseToPrimitiveTypeString = (arg: string): PrimitiveTypeString | string =
  * @param {string}arg
  * @returns {ColumnType} Mysqlのカラムの型
  */
-const parseToColumnType = (arg: string): ColumnType => {
+export const parseToColumnType = (arg: string): ColumnType => {
   const upperArg = arg.toUpperCase();
 
   // NOTE: varcharの文字列を解析
@@ -111,108 +121,3 @@ const parseToColumnType = (arg: string): ColumnType => {
 
   throw new Error('Invalid column type');
 };
-
-/**
- *
- * test
- *
- */
-describe('parseColumn', () => {
-  it('正常にparsesされる', () => {
-    // GIVEN: input (RowDataPacket)
-    const rowDataPacket = {
-      Field: 'id',
-      Type: 'bigint unsigned',
-      Null: 'NO',
-      Key: 'PRI',
-      Default: null,
-      Extra: 'auto_increment',
-    };
-
-    // GIVEN: output (ColumnSchema)
-    const expectedValue: ColumnSchema = {
-      field: 'id',
-      typeInDb: 'bigint',
-      typeInTs: 'number',
-      nullable: false,
-      key: COLUMN_KEY.PRI,
-      unsigned: true,
-      defaultValue: null,
-      extra: 'auto_increment',
-    };
-
-    // WHEN
-    const result = parseColumn(rowDataPacket);
-
-    // THEN
-    expect(result).toEqual(expectedValue);
-  });
-
-  it('Typeがenumの場合は、convertされない', () => {
-    // GIVEN: input (RowDataPacket)
-    const rowDataPacket = {
-      Field: 'status',
-      Type: "enum('active','inactive','deleted')",
-      Null: 'NO',
-      Key: 'PRI',
-      Default: null,
-      Extra: 'auto_increment',
-    };
-
-    // GIVEN: output (TableSchema)
-    const expectedValue: ColumnSchema = {
-      field: 'status',
-      typeInDb: "enum('active','inactive','deleted')",
-      typeInTs: "enum('active','inactive','deleted')",
-      nullable: false,
-      key: COLUMN_KEY.PRI,
-      unsigned: false,
-      defaultValue: null,
-      extra: 'auto_increment',
-    };
-
-    // WHEN
-    const result = parseColumn(rowDataPacket);
-
-    // THEN
-    expect(result).toEqual(expectedValue);
-  });
-});
-
-describe('parseToColumnType', () => {
-  it('正常にparseされる', () => {
-    // GIVEN: input, output(int)
-    const intString = 'int';
-
-    // WHEN
-    const result = parseToColumnType(intString);
-
-    // THEN
-    expect(result).toEqual(intString);
-  });
-
-  it('varcharやenumなど括弧の間が任意の文字になるtypeもparseされる', () => {
-    // GIVEN: input, output(varchar)
-    const varcharString = 'varchar(255)';
-
-    // GIVEN: input, output(enum)
-    const enumString = 'enum("A","B","C")';
-
-    // WHEN
-    const resultOfParseVarcharString = parseToColumnType(varcharString);
-    const resultOfParseEnumString = parseToColumnType(enumString);
-
-    // THEN
-    expect(resultOfParseVarcharString).toEqual(varcharString);
-    expect(resultOfParseEnumString).toEqual(enumString);
-  });
-
-  it('一致するColumnTypeがない場合はエラー', () => {
-    // GIVEN: input(一致するColumnTypeがない)
-    const invalidInput = 'invalidType';
-
-    // WHEN
-    // THEN
-    expect(() => parseToColumnType(invalidInput)).toThrow('Invalid column type');
-  });
-});
