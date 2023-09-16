@@ -14,23 +14,12 @@ const defaultColumn: ColumnSchema = {
   extra: '',
 };
 
-export type ParseOptions = {
-  parseToPrimitiveTypeString: (type: string) => PrimitiveTypeString | string;
-};
-
-export type ParseColumn = {
-  (arg: { [key: string]: unknown }, options: ParseOptions): ColumnSchema;
-};
-
 /**
  * クエリから取得したテーブル列のスキーマ情報を解析して、厳密に型指定されたColumnSchemaオブジェクトを生成
  * @param {object} arg - MySQLクエリから取得したテーブル列のスキーマ
  * @returns {ColumnSchema} - 厳密に型指定されたTableSchemaオブジェクト
  */
-export const parseColumn: ParseColumn = (
-  arg: { [key: string]: unknown },
-  options: ParseOptions,
-): ColumnSchema => {
+export const parseColumn = (arg: { [key: string]: unknown }): ColumnSchema => {
   // NOTE: オブジェクトの参照を毎回生成する
   const column = Object.assign({}, defaultColumn);
   if ('Field' in arg && typeof arg['Field'] === 'string') column.field = arg['Field'];
@@ -40,7 +29,7 @@ export const parseColumn: ParseColumn = (
     column.extra = arg['Extra'] as ColumnExtra;
   }
   if ('Type' in arg && typeof arg['Type'] === 'string') {
-    column.typeInTs = options.parseToPrimitiveTypeString(arg['Type']);
+    column.typeInTs = parseToPrimitiveTypeString(arg['Type']);
     column.typeInDb = parseToColumnType(new String(arg['Type']).replace(/unsigned/g, '').trim());
     column.unsigned = /unsigned/.test(arg['Type']);
   }
@@ -56,7 +45,7 @@ export const parseColumn: ParseColumn = (
  * @param {string} arg - MySQLクエリから取得したカラムの型
  * @return {PrimitiveTypeString | string} - TypescriptのprimitiveType(enumの場合は変換されない)
  */
-export const parseToPrimitiveTypeString = (arg: string): PrimitiveTypeString | string => {
+const parseToPrimitiveTypeString = (arg: string): PrimitiveTypeString | string => {
   const res = matchFn<string>(arg.toUpperCase())
     .with('INT', () => PRIMITIVE_TYPE.NUMBER)
     .with('TINYINT', () => PRIMITIVE_TYPE.NUMBER)
@@ -97,7 +86,7 @@ export const parseToPrimitiveTypeString = (arg: string): PrimitiveTypeString | s
  * @param {string}arg
  * @returns {ColumnType} Mysqlのカラムの型
  */
-export const parseToColumnType = (arg: string): ColumnType => {
+const parseToColumnType = (arg: string): ColumnType => {
   const upperArg = arg.toUpperCase();
 
   // NOTE: varcharの文字列を解析
@@ -119,5 +108,6 @@ export const parseToColumnType = (arg: string): ColumnType => {
   // NOTE: その他の型を確認
   if (upperArg in COLUMN_TYPE) return COLUMN_TYPE[upperArg as keyof typeof COLUMN_TYPE];
 
+  // TODO: throwをやめる
   throw new Error('Invalid column type');
 };

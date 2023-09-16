@@ -1,4 +1,4 @@
-import { Sample } from '../sample/db.schema';
+import { Sample, User } from '../.out/db.schema';
 import { migrationEntity } from './commands/migrationEntity.command';
 import { registerContainer } from './di';
 import { getNowDate } from './helpers/datetime';
@@ -14,7 +14,7 @@ const mysqlConfig = {
   registerContainer();
 
   // await schemaGen(mysqlConfig);
-  await migrationEntity([Sample], mysqlConfig);
+  await migrationEntity([Sample, User], mysqlConfig);
 })();
 
 export const NOW = getNowDate;

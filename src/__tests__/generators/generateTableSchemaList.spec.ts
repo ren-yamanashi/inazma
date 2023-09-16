@@ -1,12 +1,7 @@
-import { MysqlClientMock } from '../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
-import { container, mysqlClientKey, registerContainer } from '../di';
-import { generateTableSchemaList } from '../generateTableSchemaList';
-import { convertToErrorClass } from '../helpers/convert';
-import { isArrayOfObjects } from '../helpers/typeCheck';
-import { MysqlConnectionConfig } from '../interfaces/mysql.interface';
-import { parseColumn, parseToPrimitiveTypeString } from '../parser/parseColumn';
-import { parseIndexes } from '../parser/parseIndex';
-import { TableSchema } from '../types/schema.type';
+import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
+import { container, mysqlClientKey, registerContainer } from '../../di';
+import { generateTableSchemaList } from '../../generators/generateTableSchemaList';
+import { TableSchema } from '../../types/schema.type';
 
 describe('generateTableSchemaList', () => {
   const APP_ENV = process.env.APP_ENV;
@@ -23,19 +18,11 @@ describe('generateTableSchemaList', () => {
     jest.spyOn(mysqlClientMock, 'endConnection');
   });
 
-  beforeEach(() => {
+  afterEach(() => {
     process.env.APP_ENV = APP_ENV;
   });
 
   it('正常にschemaが生成される', async () => {
-    // GIVEN: input(MysqlConnectionConfig)
-    const mysqlClientConfig: MysqlConnectionConfig = {
-      host: 'sample',
-      user: 'test',
-      password: 'test',
-      database: 'sample',
-    };
-
     // GIVEN: response(schema)
     const tableSchema: TableSchema = {
       columns: [
@@ -96,13 +83,7 @@ describe('generateTableSchemaList', () => {
     };
 
     // WHEN
-    const result = await generateTableSchemaList(mysqlClientMock, {
-      isArrayOfObjects: isArrayOfObjects,
-      parseIndexes: parseIndexes,
-      convertToErrorClass: convertToErrorClass,
-      parseToPrimitiveTypeString: parseToPrimitiveTypeString,
-      parseColumn: parseColumn,
-    });
+    const result = await generateTableSchemaList(mysqlClientMock);
 
     // THEN: 関数の戻り値が正しいか
     expect(result).toEqual([tableSchema]);

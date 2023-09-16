@@ -1,26 +1,18 @@
+import { safeExecuteOfPromise } from '../helpers/safeExecute';
+import { isArrayOfObjects } from '../helpers/typeCheck';
 import { MysqlClientInterface } from '../interfaces/mysql.interface';
-import { ParseColumn } from '../parser/parseColumn';
-import { PrimitiveTypeString } from '../types/primitive.type';
+import { parseColumn } from '../parsers/parseColumn';
 import { ColumnSchema } from '../types/schema.type';
-
-type ShowQueryOptions = {
-  parseColumn: ParseColumn;
-  parseToPrimitiveTypeString: (arg: string) => PrimitiveTypeString | string;
-  isArrayOfObjects: (arg: unknown) => arg is { [key: string]: unknown }[];
-  convertToErrorClass: (error: unknown) => Error;
-};
 
 export const showColumnsQuery = async (
   tableName: string,
   mysqlClient: MysqlClientInterface,
-  options: ShowQueryOptions,
 ): Promise<ColumnSchema[] | Error> => {
-  try {
-    const columns = await mysqlClient.queryAsync('SHOW COLUMNS FROM ??', [tableName]);
-    if (!options.isArrayOfObjects(columns)) throw new Error('parseError');
-    return columns.map((column) => options.parseColumn(column, options));
-  } catch (error) {
-    console.error(error);
-    return options.convertToErrorClass(error);
-  }
+  const { data: columns, error } = await safeExecuteOfPromise(() =>
+    mysqlClient.queryAsync('SHOW COLUMNS FROM ??', [tableName]),
+  );
+  if (error) return error;
+  if (!isArrayOfObjects(columns)) return new Error('parseError');
+
+  return columns.map((column) => parseColumn(column));
 };

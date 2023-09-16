@@ -1,13 +1,5 @@
-import { ColumnSchema, TableSchema } from './types/schema.type';
-
-type GenerateStringFromSchemaOptions = {
-  toUpperCamelCase: (arg: string) => string;
-  generateStringEnumAndColumnsFromSchema: GenerateStringEnumAndColumnsFromSchema;
-};
-
-type GenerateStringFromSchema = {
-  (tables: TableSchema[], options: GenerateStringFromSchemaOptions): string;
-};
+import { toUpperCamelCase } from '../helpers/convert';
+import { ColumnSchema, TableSchema } from '../types/schema.type';
 
 /**
  * TableSchemaの配列をもとに、文字列形式のschemaを生成
@@ -15,18 +7,13 @@ type GenerateStringFromSchema = {
  * @param {GenerateStringFromSchemaOptions} options
  * @returns {string} 文字列形式のschema
  */
-export const generateStringFromSchema: GenerateStringFromSchema = (
-  tables: TableSchema[],
-  options: GenerateStringFromSchemaOptions,
-): string => {
+export const generateStringFromSchema = (tables: TableSchema[]): string => {
   const schemaStringList: string[] = [];
 
   for (const table of tables) {
-    const { enums, columns } = options.generateStringEnumAndColumnsFromSchema(table.columns, {
-      toUpperCamelCase: options.toUpperCamelCase,
-    });
+    const { enums, columns } = generateStringEnumAndColumnsFromSchema(table.columns);
 
-    const tableName = options.toUpperCamelCase(table.name);
+    const tableName = toUpperCamelCase(table.name);
 
     const indexes = table.indexes.map(
       ({ keyName, columnNames, unique }) =>
@@ -51,26 +38,14 @@ indexes: [${indexes.join(',\n')}] as IndexSchema[]
   return schemaStringList.join('\n');
 };
 
-type GenerateStringEnumAndColumnsFromSchemaOptions = {
-  toUpperCamelCase: (arg: string) => string;
-};
-
-type GenerateStringEnumAndColumnsFromSchema = {
-  (columnsSchemas: ColumnSchema[], options: GenerateStringEnumAndColumnsFromSchemaOptions): {
-    enums: string[];
-    columns: string[];
-  };
-};
-
 /**
  * ColumnSchemaの配列をもとに、文字列形式の、enumとcolumnの配列を生成する
  * @param {ColumnSchema[]} columnSchemas
  * @param {GenerateStringEnumAndColumnsFromSchemaOptions} options
  * @returns { enums: string[]; columns: string[] } 文字列形式の、enumとcolumnの配列
  */
-export const generateStringEnumAndColumnsFromSchema: GenerateStringEnumAndColumnsFromSchema = (
+const generateStringEnumAndColumnsFromSchema = (
   columnSchemas: ColumnSchema[],
-  options: GenerateStringEnumAndColumnsFromSchemaOptions,
 ): { enums: string[]; columns: string[] } => {
   const PAREN_REGEXP = /(?<=\().*?(?=\))/;
   const ENUM_REGEXP = /enum/;
@@ -80,7 +55,7 @@ export const generateStringEnumAndColumnsFromSchema: GenerateStringEnumAndColumn
   for (const column of columnSchemas) {
     const columnField = column.field;
     const columnTypeInTs = column.typeInTs;
-    const enumName = options.toUpperCamelCase(columnField);
+    const enumName = toUpperCamelCase(columnField);
 
     const isEnumType = ENUM_REGEXP.test(columnTypeInTs);
 

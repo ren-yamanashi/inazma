@@ -24,7 +24,6 @@ export const safeExecuteOfPromise = async <T>(
       data,
     };
   } catch (err: unknown) {
-    console.error(err);
     const error: Error = convertToErrorClass(err);
     return { error };
   }

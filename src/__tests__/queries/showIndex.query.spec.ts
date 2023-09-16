@@ -1,25 +1,20 @@
 import { indexSchemasDummy } from '../../__mocks__/indexSchema.dummy';
-import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
-import { convertToErrorClass } from '../../helpers/convert';
-import { isArrayOfObjects } from '../../helpers/typeCheck';
-import { parseIndexes } from '../../parser/parseIndex';
+import {
+  MysqlClientErrorMock,
+  MysqlClientMock,
+} from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
 import { showIndexQuery } from '../../queries/showIndex.query';
 
 describe('showIndexQuery', () => {
   const mysqlClientMock = new MysqlClientMock();
   const tableName = 'sample';
-  const options = {
-    parseIndexes: parseIndexes,
-    isArrayOfObjects: isArrayOfObjects,
-    convertToErrorClass: convertToErrorClass,
-  };
 
   it('正常にIndexが取得できる', async () => {
     // GIVEN: output(IndexSchema[])
     const columnSchema = indexSchemasDummy;
 
     // WHEN
-    const result = await showIndexQuery(tableName, mysqlClientMock, options);
+    const result = await showIndexQuery(tableName, mysqlClientMock);
 
     // THEN
     expect(result).toEqual(columnSchema);
@@ -34,7 +29,21 @@ describe('showIndexQuery', () => {
     const error = new Error('parseError');
 
     // WHEN
-    const result = await showIndexQuery(tableName, mysqlClientMock, options);
+    const result = await showIndexQuery(tableName, mysqlClientMock);
+
+    // THEN
+    expect(result).toEqual(error);
+  });
+
+  it('クエリが失敗した場合はエラーを返す', async () => {
+    // GIVEN: input(MysqlClientInterface)
+    const mysqlClient = new MysqlClientErrorMock();
+
+    // GIVEN: output(Error)
+    const error = new Error('DBError');
+
+    // WHEN
+    const result = await showIndexQuery(tableName, mysqlClient);
 
     // THEN
     expect(result).toEqual(error);

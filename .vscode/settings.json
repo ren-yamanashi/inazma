@@ -90,7 +90,7 @@
     },
     {
       "icon": "devcontainer",
-      "extensions": ["sample"],
+      "extensions": [".out"],
       "format": "svg"
     },
     {

@@ -1,4 +1,4 @@
-import { parseIndexes } from '../../parser/parseIndex';
+import { parseIndexes } from '../../parsers/parseIndex';
 import { IndexSchema } from '../../types/schema.type';
 
 describe('parseIndex', () => {
