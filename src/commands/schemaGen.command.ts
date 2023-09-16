@@ -147,7 +147,7 @@ columnNames: [\"id\", \"content\"]
     await schemaGen(mysqlClientConfig);
 
     // THEN: `writeFileSync`の引数が正しいか
-    expect(fsMock.writeFileSync).toHaveBeenCalledWith('.out/db.schema.ts', schema);
+    expect(fsMock.writeFileSync).toHaveBeenCalledWith('sample/db.schema.ts', schema);
 
     // THEN: connectionが終了したか
     expect(mysqlClientMock.endConnection).toHaveBeenCalled();
