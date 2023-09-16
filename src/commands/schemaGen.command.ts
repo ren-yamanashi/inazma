@@ -2,14 +2,14 @@ import { container, fileSystemKey, mysqlClientKey } from '../di';
 import {
   generateStringEnumAndColumnsFromSchema,
   generateStringFromSchema,
-} from '../generators/generateStringFromSchema';
-import { generateTableSchemaList } from '../generators/generateTableSchemaList';
+} from '../generateStringFromSchema';
+import { generateTableSchemaList } from '../generateTableSchemaList';
 import { convertToErrorClass, toUpperCamelCase } from '../helpers/convert';
 import { safeExecute } from '../helpers/safeExecute';
 import { isArrayOfObjects } from '../helpers/typeCheck';
 import { MysqlConnectionConfig } from '../interfaces/mysql.interface';
-import { parseColumn, parseToPrimitiveTypeString } from '../parsers/parseColumn';
-import { parseIndexes } from '../parsers/parseIndex';
+import { parseColumn, parseToPrimitiveTypeString } from '../parser/parseColumn';
+import { parseIndexes } from '../parser/parseIndex';
 
 export const schemaGen = async (
   mysqlClientConfig: MysqlConnectionConfig,

@@ -1,9 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
 import { columnIncludeEnumSchemasDummy } from '../../__mocks__/columnSchema.dummy';
 import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
 import { convertToErrorClass } from '../../helpers/convert';
 import { isArrayOfObjects } from '../../helpers/typeCheck';
-import { parseColumn, parseToPrimitiveTypeString } from '../../parsers/parseColumn';
+import { parseColumn, parseToPrimitiveTypeString } from '../../parser/parseColumn';
 import { showColumnsQuery } from '../../queries/showColumns.query';
 
 describe('showColumnsQuery', () => {
@@ -28,9 +27,9 @@ describe('showColumnsQuery', () => {
   });
 
   it('クエリで取得したcolumnsがオブジェクトの配列でない場合はエラー', async () => {
-    vi.spyOn(mysqlClientMock, 'queryAsync').mockReturnValue(
-      new Promise((resolve) => resolve(null)),
-    );
+    jest
+      .spyOn(mysqlClientMock, 'queryAsync')
+      .mockReturnValue(new Promise((resolve) => resolve(null)));
 
     // GIVEN: output(Error)
     const error = new Error('parseError');

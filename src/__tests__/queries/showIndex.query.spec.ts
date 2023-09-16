@@ -1,9 +1,8 @@
-import { describe, expect, it, vi } from 'vitest';
 import { indexSchemasDummy } from '../../__mocks__/indexSchema.dummy';
 import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
 import { convertToErrorClass } from '../../helpers/convert';
 import { isArrayOfObjects } from '../../helpers/typeCheck';
-import { parseIndexes } from '../../parsers/parseIndex';
+import { parseIndexes } from '../../parser/parseIndex';
 import { showIndexQuery } from '../../queries/showIndex.query';
 
 describe('showIndexQuery', () => {
@@ -27,9 +26,9 @@ describe('showIndexQuery', () => {
   });
 
   it('クエリで取得したindexがオブジェクトの配列でない場合はエラー', async () => {
-    vi.spyOn(mysqlClientMock, 'queryAsync').mockReturnValue(
-      new Promise((resolve) => resolve(null)),
-    );
+    jest
+      .spyOn(mysqlClientMock, 'queryAsync')
+      .mockReturnValue(new Promise((resolve) => resolve(null)));
 
     // GIVEN: output(Error)
     const error = new Error('parseError');

@@ -1,16 +1,15 @@
-import { describe, expect, it } from 'vitest';
 import {
   columnIncludeEnumSchemasDummy,
   columnNotIncludeEnumSchemasDummy,
-} from '../../__mocks__/columnSchema.dummy';
-import { tableSchemaDummy } from '../../__mocks__/tableSchema.dummy';
+} from '../__mocks__/columnSchema.dummy';
+import { tableSchemaDummy } from '../__mocks__/tableSchema.dummy';
 
 import {
   generateStringEnumAndColumnsFromSchema,
   generateStringFromSchema,
-} from '../../generators/generateStringFromSchema';
-import { toUpperCamelCase } from '../../helpers/convert';
-import { ColumnSchema, TableSchema } from '../../types/schema.type';
+} from '../generateStringFromSchema';
+import { toUpperCamelCase } from '../helpers/convert';
+import { ColumnSchema, TableSchema } from '../types/schema.type';
 
 describe('generateStringEnumAndColumnsFromSchema', () => {
   it('enumとcolumnが正常に生成される', () => {

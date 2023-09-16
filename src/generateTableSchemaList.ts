@@ -1,10 +1,10 @@
-import { MysqlClientInterface } from '../interfaces/mysql.interface';
-import { ParseOptions } from '../parsers/parseColumn';
-import { showColumnsQuery } from '../queries/showColumns.query';
-import { showIndexQuery } from '../queries/showIndex.query';
-import { showTablesQuery } from '../queries/showTables.query';
-import { PrimitiveTypeString } from '../types/primitive.type';
-import { ColumnSchema, IndexSchema, TableSchema } from '../types/schema.type';
+import { MysqlClientInterface } from './interfaces/mysql.interface';
+import { ParseOptions } from './parser/parseColumn';
+import { showColumnsQuery } from './queries/showColumns.query';
+import { showIndexQuery } from './queries/showIndex.query';
+import { showTablesQuery } from './queries/showTables.query';
+import { PrimitiveTypeString } from './types/primitive.type';
+import { ColumnSchema, IndexSchema, TableSchema } from './types/schema.type';
 
 type GenerateTableSchemaListOptions = {
   isArrayOfObjects: (arg: unknown) => arg is { [key: string]: unknown }[];
