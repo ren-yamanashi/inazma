@@ -1,21 +1,18 @@
+import { safeExecuteOfPromise } from '../helpers/safeExecute';
+import { isArrayOfObjects } from '../helpers/typeCheck';
 import { MysqlClientInterface } from '../interfaces/mysql.interface';
+import { parseIndexes } from '../parsers/parseIndex';
 import { IndexSchema } from '../types/schema.type';
-
-type ShowQueryOptions = {
-  parseIndexes: (args: { [key: string]: unknown }[]) => IndexSchema[];
-  isArrayOfObjects: (arg: unknown) => arg is { [key: string]: unknown }[];
-};
 
 export const showIndexQuery = async (
   tableName: string,
   mysqlClient: MysqlClientInterface,
-  options: ShowQueryOptions,
 ): Promise<IndexSchema[] | Error> => {
-  try {
-    const indexes = await mysqlClient.queryAsync('SHOW INDEX FROM ??', [tableName]);
-    if (!options.isArrayOfObjects(indexes)) throw new Error('parseError');
-    return options.parseIndexes(indexes);
-  } catch (error) {
-    return new Error('parseError');
-  }
+  const { data: indexes, error } = await safeExecuteOfPromise(() =>
+    mysqlClient.queryAsync('SHOW INDEX FROM ??', [tableName]),
+  );
+  if (error) return error;
+  if (!isArrayOfObjects(indexes)) return new Error('parseError');
+
+  return parseIndexes(indexes);
 };

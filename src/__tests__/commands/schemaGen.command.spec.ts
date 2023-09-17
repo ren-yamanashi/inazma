@@ -27,7 +27,7 @@ describe('schemaGen', () => {
     process.env.APP_ENV = APP_ENV;
   });
 
-  it('should generate schema successfully', async () => {
+  it('正常にschemaが生成される', async () => {
     // GIVEN: input(MysqlConnectionConfig)
     const mysqlClientConfig: MysqlConnectionConfig = {
       host: 'sample',
@@ -43,63 +43,71 @@ inactive,
 deleted
 };
 
-@Index(\"id_contents_idx\", [\"id\", \"content\"], {
-unique: false
-})
-@Entity(\"sample\", {database: \"sample\"})
-class Sample {
-@AutoIncrementColumn({
-type: "bigint",
-default: null,
+const Sample: TableSchema = {
+database: 'sample',
+name: 'sample',
+columns: [{
+field: 'id',
+typeInTs: 'number',
+typeInDb: 'bigint',
 unsigned: true,
-unique: true,
-primary: true
-})
-id: number;
-
-@Column({
-type: "varchar(255)",
-default: null,
+nullable: false,
+key: 'PRI',
+defaultValue: null,
+extra: 'auto_increment'
+},
+{
+field: 'content',
+typeInTs: 'string',
+typeInDb: 'varchar(255)',
 unsigned: false,
-unique: false,
-primary: false
-})
-content: string | null;
-
-@Column({
-type: "int",
-default: 0,
+nullable: true,
+key: '',
+defaultValue: null,
+extra: ''
+},
+{
+field: 'order',
+typeInTs: 'number',
+typeInDb: 'int',
 unsigned: true,
-unique: false,
-primary: false
-})
-order: number;
-
-@Column({
-type: "enum('active','inactive','deleted')",
-default: Status.active,
+nullable: false,
+key: '',
+defaultValue: '0',
+extra: ''
+},
+{
+field: 'status',
+typeInTs: \"enum('active','inactive','deleted')\",
+typeInDb: \"enum('active','inactive','deleted')\",
 unsigned: false,
-unique: false,
-primary: false
-})
-status: Status;
-
-@DefaultGeneratedColumn({
-type: "datetime",
-default: NOW(),
+nullable: false,
+key: '',
+defaultValue: 'Status.active',
+extra: ''
+},
+{
+field: 'createdDate',
+typeInTs: 'Date',
+typeInDb: 'datetime',
 unsigned: false,
+nullable: false,
+key: '',
+defaultValue: 'NOW()',
+extra: 'DEFAULT_GENERATED'
+}] as ColumnSchema[],
+indexes: [{
+keyName: 'id_contents_idx',
 unique: false,
-primary: false
-})
-createdDate: Date;
-};
-`;
+columnNames: [\"id\", \"content\"]
+}] as IndexSchema[]
+}`;
 
     // WHEN
     await schemaGen(mysqlClientConfig);
 
     // THEN: `writeFileSync`の引数が正しいか
-    expect(fsMock.writeFileSync).toHaveBeenCalledWith('sample/db.schema.ts', schema);
+    expect(fsMock.writeFileSync).toHaveBeenCalledWith('.out/db.schema.ts', schema);
 
     // THEN: connectionが終了したか
     expect(mysqlClientMock.endConnection).toHaveBeenCalled();

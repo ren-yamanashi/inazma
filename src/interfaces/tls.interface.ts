@@ -1,16 +1,16 @@
-interface KeyObject {
+type KeyObject = {
   pem: string | Buffer;
   passphrase?: string | undefined;
-}
+};
 
 type SecureVersion = 'TLSv1.3' | 'TLSv1.2' | 'TLSv1.1' | 'TLSv1';
 
-interface PxfObject {
+type PxfObject = {
   buf: string | Buffer;
   passphrase?: string | undefined;
-}
+};
 
-export interface SecureContextOptions {
+export type SecureContextOptions = {
   ca?: string | Buffer | Array<string | Buffer> | undefined;
   cert?: string | Buffer | Array<string | Buffer> | undefined;
   sigalgs?: string | undefined;
@@ -31,4 +31,4 @@ export interface SecureContextOptions {
   sessionIdContext?: string | undefined;
   ticketKeys?: Buffer | undefined;
   sessionTimeout?: number | undefined;
-}
+};

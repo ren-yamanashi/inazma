@@ -1,45 +1,20 @@
-import { schemaGen } from './commands/schemaGen.command';
-import {
-  autoIncrementColumnDecorator,
-  columnDecorator,
-  defaultGeneratedColumnDecorator,
-  onUpdateCurrentTimestampColumnDecorator,
-  storedGeneratedColumnDecorator,
-  virtualGeneratedColumnDecorator,
-} from './decorators/column.decorator';
-import { entityDecorator, indexDecorator } from './decorators/table.decorator';
+import { Sample, User } from '../.out/db.schema';
+import { migrationEntity } from './commands/migrationEntity.command';
 import { registerContainer } from './di';
 import { getNowDate } from './helpers/datetime';
+
+const mysqlConfig = {
+  host: 'localhost',
+  user: process.env.MYSQL_USERNAME,
+  password: process.env.MYSQL_PASSWORD,
+  database: 'sample',
+};
 
 (async () => {
   registerContainer();
 
-  await schemaGen({
-    host: 'localhost',
-    user: process.env.MYSQL_USERNAME,
-    password: process.env.MYSQL_PASSWORD,
-    database: 'sample',
-  });
+  // await schemaGen(mysqlConfig);
+  await migrationEntity([Sample, User], mysqlConfig);
 })();
 
 export const NOW = getNowDate;
-export const Column = columnDecorator;
-export const AutoIncrementColumn = autoIncrementColumnDecorator;
-export const VirtualGeneratedColumn = virtualGeneratedColumnDecorator;
-export const StoredGeneratedColumn = storedGeneratedColumnDecorator;
-export const DefaultGeneratedColumn = defaultGeneratedColumnDecorator;
-export const OnUpdateCurrentTimestampColumn = onUpdateCurrentTimestampColumnDecorator;
-export const Index = indexDecorator;
-export const Entity = entityDecorator;
-
-export default {
-  NOW,
-  Column,
-  AutoIncrementColumn,
-  VirtualGeneratedColumn,
-  StoredGeneratedColumn,
-  DefaultGeneratedColumn,
-  OnUpdateCurrentTimestampColumn,
-  Index,
-  Entity,
-};

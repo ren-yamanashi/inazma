@@ -1,9 +1,10 @@
-/dist
+.out/
+dist/
 .vscode/
-src/__tests__
+src/__tests__/
+env/
 node_modules
 package.json
 jest.config.ts
 .eslintrc.js
-sample/
 *.js

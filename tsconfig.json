@@ -17,7 +17,8 @@
     "moduleResolution": "node"
   },
   "include": [
-    "sample/db.schema.ts",
+    ".out/**/*",
+    "env/env.d.ts",
     "src/**/*",
     "src/__tests__/**/*"
   ],

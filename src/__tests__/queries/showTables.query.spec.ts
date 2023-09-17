@@ -1,12 +1,11 @@
-import { MysqlClientMock } from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
-import { isArrayOfObjects } from '../../helpers/typeCheck';
+import {
+  MysqlClientErrorMock,
+  MysqlClientMock,
+} from '../../__mocks__/infrastructures/mysqlClient.infrastructure.mock';
 import { showTablesQuery } from '../../queries/showTables.query';
 
 describe('showTables', () => {
   const mysqlClientMock = new MysqlClientMock();
-  const options = {
-    isArrayOfObjects: isArrayOfObjects,
-  };
 
   it('正常にTableが取得できる', async () => {
     // GIVEN: output({ databaseName: string; tableName: string }[])
@@ -18,7 +17,7 @@ describe('showTables', () => {
     ];
 
     // WHEN
-    const result = await showTablesQuery(mysqlClientMock, options);
+    const result = await showTablesQuery(mysqlClientMock);
 
     // THEN
     expect(result).toEqual(tables);
@@ -33,7 +32,21 @@ describe('showTables', () => {
     const error = new Error('parseError');
 
     // WHEN
-    const result = await showTablesQuery(mysqlClientMock, options);
+    const result = await showTablesQuery(mysqlClientMock);
+
+    // THEN
+    expect(result).toEqual(error);
+  });
+
+  it('クエリが失敗した場合はエラーを返す', async () => {
+    // GIVEN: input(MysqlClientInterface)
+    const mysqlClient = new MysqlClientErrorMock();
+
+    // GIVEN: output(Error)
+    const error = new Error('DBError');
+
+    // WHEN
+    const result = await showTablesQuery(mysqlClient);
 
     // THEN
     expect(result).toEqual(error);

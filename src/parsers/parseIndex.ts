@@ -1,9 +1,10 @@
-import { IndexSchema } from './types/schema.type';
+import { IndexSchema } from '../types/schema.type';
 
-export interface ParseIndexes {
-  (args: { [key: string]: unknown }[]): IndexSchema[];
-}
-
+/**
+ * クエリの出力結果を解析してIndexSchemaの形に変換
+ * @param {{ [key: string]: unknown }[]}args - クエリの出力結果
+ * @returns {IndexSchema[]}
+ */
 export const parseIndexes = (args: { [key: string]: unknown }[]): IndexSchema[] => {
   const KEY_NAME_PROPERTY = 'Key_name';
   const COLUMN_NAME_PROPERTY = 'Column_name';

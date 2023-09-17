@@ -90,7 +90,7 @@
     },
     {
       "icon": "devcontainer",
-      "extensions": ["sample"],
+      "extensions": [".out"],
       "format": "svg"
     },
     {
@@ -105,6 +105,9 @@
     }
   ],
   "[dotenv]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   }
 }
